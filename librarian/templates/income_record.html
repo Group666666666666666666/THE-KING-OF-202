@@ -10,6 +10,7 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'font/css/font-awesome.min.css' %}" rel="stylesheet">
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/echarts.common.min.js' %}"></script>
 {# <link rel="icon" href="/static/images/favicon.ico">#}
 {#    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">#}
 {#    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>#}
@@ -100,7 +101,7 @@
             <a class="navbar-brand">Bibliosoft</a>
         </div>
         <div>
-            <ul class="nav navbar-nav navbar-right" id="menu" style="position:absolut; left:0px; top:0px">
+            <ul class="nav navbar-nav navbar-right" id="menu" style="left:0px; top:0px">
                 <li><a href="{% url 'manage_page' %}"><span class="glyphicon glyphicon-th-list"></span> {% trans '进入管理中心' %}</a></li>
             </ul>
         </div>
@@ -124,8 +125,12 @@
         <img src="/static/images/book_logo.png" style="vertical-align:middle;" width="150"  />&nbsp;&nbsp;&nbsp;
         <span style="font-family: 'Adobe 宋体 Std L'; font-size: 36px;">{% trans '收入记录' %}</span>
     </div>
-<div class="container">
-
+<div class="container" style="position: relative; top:-30px;">
+    <div style="text-align: right">
+        <label class="btn btn-primary" onclick="changeView()">
+            Change View
+        </label>
+    </div>
         <div>
             <div align="center">
             <form action="#" method="post" id="income">
@@ -144,7 +149,7 @@
                     {% trans '全部' %}
                 </label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <h4 id="" style="display:inline; height:50px; width:350px;text-align:right;">
+                <h4 style="display:inline; height:50px; width:350px;text-align:right;">
                     <span id="find_way"></span>
                     {% trans '总收入:' %}&nbsp;
                     <span id="all_fine" style="text-align: right">{{ all_money }}</span>￥&nbsp;&nbsp;&nbsp;
@@ -156,6 +161,7 @@
 
             </form>
             </div>
+        <div id="income_table" style="display: block;">
 	    <table align="center" id="tab" width="300px"  class="table tab1" style="text-align: center;">
 
 	        <thead>
@@ -183,6 +189,10 @@
             {% endfor %}
             </tbody>
         </table>
+        </div>
+        <div id="income_chart" style="display: none; width: 1000px; height: 400px;">
+
+        </div>
     </div>
 </div>
 <div style="padding-bottom: 45px;"></div>
@@ -195,6 +205,353 @@ Copyright &copy;2018 Library
 </footer>
 
 <script>
+    var dayFine = new Array();
+    var dayDeposit = new Array();
+    function incomeWeek(type,num,day) {
+        switch (day) {
+                case 0:
+                    type[0]+=num;
+                    break;
+                case 1:
+                    type[1]+=num;
+                    break;
+                case 2:
+                    type[2]+=num;
+                    break;
+                case 3:
+                    type[3]+=num;
+                    break;
+                case 4:
+                    type[4]+=num;
+                    break;
+                case 5:
+                    type[5]+=num;
+                    break;
+                case 6:
+                    type[6]+=num;
+                    break;
+        }
+    }
+    function incomeMonth(type,num,week) { //一个月最多有6周
+        switch (week) {
+                case 0:
+                    type[0]+=num;
+                    break;
+                case 1:
+                    type[1]+=num;
+                    break;
+                case 2:
+                    type[2]+=num;
+                    break;
+                case 3:
+                    type[3]+=num;
+                    break;
+                case 4:
+                    type[4]+=num;
+                    break;
+                case 5:
+                    type[5]+=num;
+                    break;
+        }
+    }
+    var myChart = echarts.init(document.getElementById('income_chart'));
+    for(var i=0;i<7;i++){
+        dayFine[i]=dayDeposit[i]=0;
+    }
+    {% for money_order in all_money_orders %}
+        var day = new Date("{{ money_order.order_time | date:"Y-m-d H:i:s" }}").getDay()
+        {% if money_order.get_order_type_display == 'FINE' %}
+            incomeWeek(dayFine,{{ money_order.num }},day)
+        {% else %}
+            incomeWeek(dayDeposit,{{ money_order.num }},day)
+        {% endif %}
+    {% endfor %}
+
+    //初始化echarts实例
+        var option = {
+            title : {
+                text: "{% trans '全部收入记录' %}"
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:["{% trans '罚金' %}","{% trans '保证金' %}"]
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : ["1","2","2","4","5","6","7"],
+                    axisLabel : {
+                        formatter: "{value}{% trans '日' %}"
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel : {
+                        formatter: '{value} ￥'
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:"{% trans '罚金' %}",
+                    type:'line',
+                    data:[dayFine[1], dayFine[2], dayFine[3], dayFine[4], dayFine[5], dayFine[6], dayFine[0]],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: "{% trans '最大值' %}"},
+                            {type : 'min', name: "{% trans '最小值' %}"}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: "{% trans '平均值' %}"}
+                        ]
+                    }
+                },
+                {
+                    name:"{% trans '保证金' %}",
+                    type:'line',
+                    data:[dayDeposit[1], dayDeposit[2], dayDeposit[3], dayDeposit[4], dayDeposit[5], dayDeposit[6], dayDeposit[0]],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: "{% trans '最大值' %}"},
+                            {type : 'min', name: "{% trans '最小值' %}"}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: "{% trans '平均值' %}"}
+                        ]
+                    }
+                }
+            ]
+        };
+    //使用制定的配置项和数据显示图表
+    myChart.setOption(option);
+
+    function changeWeek(incomes){
+        for(var i=0;i<7;i++){
+            dayFine[i]=dayDeposit[i]=0;
+        }
+        for( var i=0;i<incomes.length;i++){
+            var day = new Date(incomes[i]["order_time"]).getDay()
+            if (incomes[i]["order_type"] == 'FINE'){
+                incomeWeek(dayFine,incomes[i]["num"],day)
+            }else {
+                incomeWeek(dayDeposit,incomes[i]["num"],day)
+            }
+        }
+        //初始化echarts实例
+        var option = {
+            title : {
+                text: "{% trans '周收入记录' %}"
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:["{% trans '罚金' %}","{% trans '保证金' %}"]
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : ["1","2","2","4","5","6","7"],
+                    axisLabel : {
+                        formatter: "{value}{% trans '日' %}"
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel : {
+                        formatter: '{value} ￥'
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:"{% trans '罚金' %}",
+                    type:'line',
+                    data:[dayFine[1], dayFine[2], dayFine[3], dayFine[4], dayFine[5], dayFine[6], dayFine[0]],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: "{% trans '最大值' %}"},
+                            {type : 'min', name: "{% trans '最小值' %}"}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: "{% trans '平均值' %}"}
+                        ]
+                    }
+                },
+                {
+                    name:"{% trans '保证金' %}",
+                    type:'line',
+                    data:[dayDeposit[1], dayDeposit[2], dayDeposit[3], dayDeposit[4], dayDeposit[5], dayDeposit[6], dayDeposit[0]],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: "{% trans '最大值' %}"},
+                            {type : 'min', name: "{% trans '最小值' %}"}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: "{% trans '平均值' %}"}
+                        ]
+                    }
+                }
+            ]
+        };
+        //使用制定的配置项和数据显示图表
+        myChart.clear();
+        myChart.setOption(option);
+    }
+    function getWeekFromDate(date) {
+        // 将字符串转为标准时间格式
+        let w = date.getDay();//周几
+        if (w === 0) {
+            w = 7;
+        }
+        let week = Math.ceil((date.getDate() + 6 - w) / 7) - 1;
+        return week;
+    }
+    function changeMonth(incomes){
+        for(var i=0;i<6;i++){
+            dayFine[i]=dayDeposit[i]=0;
+        }
+        for( var i=0;i<incomes.length;i++){
+            var date = new Date(incomes[i]["order_time"]);
+            var week = getWeekFromDate(date);
+            if (incomes[i]["order_type"] == 'FINE'){
+                incomeMonth(dayFine,incomes[i]["num"],week)
+            }else {
+                incomeMonth(dayDeposit,incomes[i]["num"],week)
+            }
+        }
+        //初始化echarts实例
+        var option = {
+                title : {
+                    text: "{% trans '月收入记录' %}"
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:["{% trans '罚金' %}","{% trans '保证金' %}"]
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : ['1','2','3','4','5','6'],
+                        axisLabel : {
+                            formatter: "{value}{% trans '周' %}"
+                        }
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} ￥'
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:"{% trans '罚金' %}",
+                        type:'line',
+                        data:[dayFine[0], dayFine[1], dayFine[2], dayFine[3], dayFine[4], dayFine[5]],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: "{% trans '最大值' %}"},
+                                {type : 'min', name: "{% trans '最小值' %}"}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: "{% trans '平均值' %}"}
+                            ]
+                        }
+                    },
+                    {
+                        name:"{% trans '保证金' %}",
+                        type:'line',
+                        data:[dayDeposit[0], dayDeposit[1], dayDeposit[2], dayDeposit[3], dayDeposit[4], dayDeposit[5]],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: "{% trans '最大值' %}"},
+                                {type : 'min', name: "{% trans '最小值' %}"}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: "{% trans '平均值' %}"}
+                            ]
+                        }
+                    }
+                ]
+        };
+        //使用制定的配置项和数据显示图表
+        myChart.clear();
+        myChart.setOption(option);
+    }
+    var flag = 0;
+    function changeView(){
+        //alert(date);
+        var chart = document.getElementById("income_chart");
+        var table = document.getElementById("income_table");
+        if(flag){
+            flag = 0;
+            chart.style.display = "none";
+            table.style.display = "block";
+        }else{
+            flag = 1;
+            chart.style.display = "block";
+            table.style.display = "none";
+        }
+    }
     $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
@@ -254,6 +611,14 @@ Copyright &copy;2018 Library
                 var income_deposit = result["income_deposit"];  //押金
                 var income_fine = result["income_fine"];  //罚金
                 var income_records = result["income_records"];
+                if(str == 'week'){
+                    changeWeek(income_records);
+                }else if (str == 'month'){
+                    changeMonth(income_records)
+                }else {
+                    myChart.clear();
+                    //document.getElementById('income_chart').innerHTML = "<h1>{% trans '无法显示当前数据统计！' %}</h1>"
+                }
                 document.getElementById("fine").innerText = income_fine;
                 document.getElementById("deposit").innerText = income_deposit;
                 add_income_record(income_num, income_records);  //添加押金和罚金参数，修改函数

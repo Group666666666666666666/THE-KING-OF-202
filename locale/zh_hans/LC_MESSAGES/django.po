@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 13:36+0800\n"
+"POT-Creation-Date: 2018-11-14 17:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,8 @@ msgstr "修改本账户密码"
 
 #: .\administrator\templates\admin2.html:203
 #: .\librarian\templates\del_message.html:189
-#: .\librarian\templates\income_record.html:144
+#: .\librarian\templates\income_chart.html:145
+#: .\librarian\templates\income_record.html:149
 #: .\librarian\templates\index.html:177 .\librarian\templates\index.html:188
 #: .\librarian\templates\index.html:192
 #: .\librarian\templates\post_news_record.html:143
@@ -216,7 +217,7 @@ msgstr "修改成功!"
 #: .\administrator\templates\admin2.html:481
 #: .\administrator\templates\admin_change_passwd.html:143
 #: .\administrator\templates\edit_librarian.html:131
-#: .\librarian\templates\edit_news.html:168
+#: .\librarian\templates\edit_news.html:181
 #: .\librarian\templates\set_reader.html:170
 #: .\librarian\templates\set_reader.html:202
 #: .\reader\templates\change_passwd.html:136
@@ -232,16 +233,17 @@ msgstr "修改失败!"
 #: .\librarian\templates\book_detail.html:87
 #: .\librarian\templates\del_book.html:65
 #: .\librarian\templates\del_message.html:161
-#: .\librarian\templates\edit_news.html:89
-#: .\librarian\templates\income_record.html:104
-#: .\librarian\templates\index.html:138 .\librarian\templates\post_news.html:86
+#: .\librarian\templates\edit_news.html:102
+#: .\librarian\templates\income_chart.html:105
+#: .\librarian\templates\income_record.html:105
+#: .\librarian\templates\index.html:138 .\librarian\templates\post_news.html:99
 #: .\librarian\templates\post_news_record.html:115
 #: .\librarian\templates\search_results.html:67
 #: .\librarian\templates\set_book.html:72
 #: .\librarian\templates\set_book.html:103
 #: .\librarian\templates\set_reader.html:84
 #: .\librarian\templates\set_reader.html:114
-#: .\librarian\templates\view_news.html:75
+#: .\librarian\templates\view_news.html:89
 #: .\reader\templates\change_passwd.html:77
 msgid "进入管理中心"
 msgstr "管理中心"
@@ -463,7 +465,7 @@ msgstr "用户名不可用"
 
 #: .\librarian\templates\book_barcode.html:67
 #: .\librarian\templates\book_detail.html:85
-#: .\librarian\templates\view_news.html:73
+#: .\librarian\templates\view_news.html:87
 msgid "上一页"
 msgstr "上一页"
 
@@ -473,7 +475,7 @@ msgstr "书籍条形码"
 
 #: .\librarian\templates\book_detail.html:89
 #: .\librarian\templates\search_results.html:69
-#: .\librarian\templates\view_news.html:77
+#: .\librarian\templates\view_news.html:91
 msgid "返回个人中心"
 msgstr "返回个人中心"
 
@@ -606,90 +608,105 @@ msgstr "删除时间"
 msgid "图书管理员"
 msgstr "图书管理员"
 
-#: .\librarian\templates\edit_news.html:88
-#: .\librarian\templates\post_news.html:85
+#: .\librarian\templates\edit_news.html:101
+#: .\librarian\templates\post_news.html:98
 msgid "返回消息记录"
 msgstr "返回消息记录"
 
-#: .\librarian\templates\edit_news.html:113
-#: .\librarian\templates\post_news.html:110
+#: .\librarian\templates\edit_news.html:126
+#: .\librarian\templates\post_news.html:123
 msgid "公告"
 msgstr "公告"
 
-#: .\librarian\templates\edit_news.html:118
+#: .\librarian\templates\edit_news.html:131
 #: .\librarian\templates\post_news_record.html:162
 msgid "公告ID"
 msgstr "公告ID"
 
-#: .\librarian\templates\edit_news.html:120
+#: .\librarian\templates\edit_news.html:133
 msgid "原发布者"
 msgstr "原发布者"
 
-#: .\librarian\templates\edit_news.html:122
+#: .\librarian\templates\edit_news.html:135
 msgid "现发布者"
 msgstr "现发布者"
 
-#: .\librarian\templates\edit_news.html:127
+#: .\librarian\templates\edit_news.html:140
 #: .\librarian\templates\index.html:240
-#: .\librarian\templates\post_news.html:120
+#: .\librarian\templates\post_news.html:133
 #: .\librarian\templates\post_news_record.html:163
 msgid "标题"
 msgstr "标题"
 
-#: .\librarian\templates\edit_news.html:131
-#: .\librarian\templates\post_news.html:123
+#: .\librarian\templates\edit_news.html:144
+#: .\librarian\templates\post_news.html:136
 msgid "内容"
 msgstr "内容"
 
-#: .\librarian\templates\edit_news.html:136
-#: .\librarian\templates\post_news.html:127
+#: .\librarian\templates\edit_news.html:149
+#: .\librarian\templates\post_news.html:140
 msgid "提交"
 msgstr "提交"
 
-#: .\librarian\templates\edit_news.html:165
+#: .\librarian\templates\edit_news.html:178
 #: .\librarian\templates\set_reader.html:167
 #: .\librarian\templates\set_reader.html:199
 #: .\reader\templates\user_message.html:386
 msgid "修改成功"
 msgstr "修改成功"
 
-#: .\librarian\templates\income_record.html:125
+#: .\librarian\templates\income_chart.html:126
+#: .\librarian\templates\income_record.html:126
 #: .\librarian\templates\manager_page.html:191
 msgid "收入记录"
 msgstr "收入记录"
 
-#: .\librarian\templates\income_record.html:132
+#: .\librarian\templates\income_chart.html:133
+#: .\librarian\templates\income_record.html:137
 msgid "查看日期："
 msgstr "查看日期："
 
-#: .\librarian\templates\income_record.html:135
-#: .\librarian\templates\income_record.html:262
+#: .\librarian\templates\income_chart.html:136
+#: .\librarian\templates\income_chart.html:263
+#: .\librarian\templates\income_record.html:140
+#: .\librarian\templates\income_record.html:298
+#: .\librarian\templates\income_record.html:388
+#: .\librarian\templates\income_record.html:627
 msgid "日"
 msgstr "日"
 
-#: .\librarian\templates\income_record.html:138
-#: .\librarian\templates\income_record.html:264
+#: .\librarian\templates\income_chart.html:139
+#: .\librarian\templates\income_chart.html:265
+#: .\librarian\templates\income_record.html:143
+#: .\librarian\templates\income_record.html:489
+#: .\librarian\templates\income_record.html:629
 msgid "周"
 msgstr "周"
 
-#: .\librarian\templates\income_record.html:141
-#: .\librarian\templates\income_record.html:266
+#: .\librarian\templates\income_chart.html:142
+#: .\librarian\templates\income_chart.html:267
+#: .\librarian\templates\income_record.html:146
+#: .\librarian\templates\income_record.html:631
 msgid "月"
 msgstr "月"
 
-#: .\librarian\templates\income_record.html:149
+#: .\librarian\templates\income_chart.html:150
+#: .\librarian\templates\income_record.html:154
 msgid "总收入:"
 msgstr "总收入:"
 
-#: .\librarian\templates\income_record.html:151
+#: .\librarian\templates\income_chart.html:152
+#: .\librarian\templates\income_record.html:156
 msgid "罚金收入:"
 msgstr "罚金收入:"
 
-#: .\librarian\templates\income_record.html:153
+#: .\librarian\templates\income_chart.html:154
+#: .\librarian\templates\income_record.html:158
 msgid "保证金收入:"
 msgstr "保证金收入:"
 
-#: .\librarian\templates\income_record.html:163
+#: .\librarian\templates\income_chart.html:164
+#: .\librarian\templates\income_record.html:169
 #: .\librarian\templates\manager_page.html:290
 #: .\librarian\templates\manager_page.html:311
 #: .\librarian\templates\manager_page.html:332
@@ -700,30 +717,96 @@ msgstr "保证金收入:"
 msgid "订单号"
 msgstr "订单号"
 
-#: .\librarian\templates\income_record.html:164
+#: .\librarian\templates\income_chart.html:165
+#: .\librarian\templates\income_record.html:170
 #: .\librarian\templates\manager_page.html:248
 #: .\librarian\templates\manager_page.html:354
 #: .\reader\templates\user_message.html:204
 msgid "用户名"
 msgstr "用户名"
 
-#: .\librarian\templates\income_record.html:165
+#: .\librarian\templates\income_chart.html:166
+#: .\librarian\templates\income_record.html:171
 msgid "订单时间"
 msgstr "订单时间"
 
-#: .\librarian\templates\income_record.html:166
+#: .\librarian\templates\income_chart.html:167
+#: .\librarian\templates\income_record.html:172
 msgid "收入类型"
 msgstr "收入类型"
 
-#: .\librarian\templates\income_record.html:167
+#: .\librarian\templates\income_chart.html:168
+#: .\librarian\templates\income_record.html:173
 #: .\librarian\templates\manager_page.html:356
 #: .\reader\templates\user_message.html:334
 msgid "收款人"
 msgstr "收款人"
 
-#: .\librarian\templates\income_record.html:168
+#: .\librarian\templates\income_chart.html:169
+#: .\librarian\templates\income_record.html:174
 msgid "收入金额"
 msgstr "收入金额"
+
+#: .\librarian\templates\income_record.html:273
+msgid "全部收入记录"
+msgstr "全部收入记录"
+
+#: .\librarian\templates\income_record.html:279
+#: .\librarian\templates\income_record.html:312
+#: .\librarian\templates\income_record.html:369
+#: .\librarian\templates\income_record.html:402
+#: .\librarian\templates\income_record.html:470
+#: .\librarian\templates\income_record.html:503
+msgid "罚金"
+msgstr "罚金"
+
+#: .\librarian\templates\income_record.html:279
+#: .\librarian\templates\income_record.html:328
+#: .\librarian\templates\income_record.html:369
+#: .\librarian\templates\income_record.html:418
+#: .\librarian\templates\income_record.html:470
+#: .\librarian\templates\income_record.html:519
+msgid "保证金"
+msgstr "保证金"
+
+#: .\librarian\templates\income_record.html:317
+#: .\librarian\templates\income_record.html:333
+#: .\librarian\templates\income_record.html:407
+#: .\librarian\templates\income_record.html:423
+#: .\librarian\templates\income_record.html:508
+#: .\librarian\templates\income_record.html:524
+msgid "最大值"
+msgstr "最大值"
+
+#: .\librarian\templates\income_record.html:318
+#: .\librarian\templates\income_record.html:334
+#: .\librarian\templates\income_record.html:408
+#: .\librarian\templates\income_record.html:424
+#: .\librarian\templates\income_record.html:509
+#: .\librarian\templates\income_record.html:525
+msgid "最小值"
+msgstr "最小值"
+
+#: .\librarian\templates\income_record.html:323
+#: .\librarian\templates\income_record.html:339
+#: .\librarian\templates\income_record.html:413
+#: .\librarian\templates\income_record.html:429
+#: .\librarian\templates\income_record.html:514
+#: .\librarian\templates\income_record.html:530
+msgid "平均值"
+msgstr "平均值"
+
+#: .\librarian\templates\income_record.html:363
+msgid "周收入记录"
+msgstr "周收入记录"
+
+#: .\librarian\templates\income_record.html:464
+msgid "月收入记录"
+msgstr "月收入记录"
+
+#: .\librarian\templates\income_record.html:620
+msgid "无法显示当前数据统计！"
+msgstr "无法显示当前数据统计！"
 
 #: .\librarian\templates\index.html:143
 msgid "注销"
@@ -749,7 +832,7 @@ msgid "发布时间"
 msgstr "发布时间"
 
 #: .\librarian\templates\index.html:243
-#: .\librarian\templates\post_news.html:116
+#: .\librarian\templates\post_news.html:129
 #: .\librarian\templates\post_news_record.html:166
 msgid "发布者"
 msgstr "发布者"
@@ -921,15 +1004,15 @@ msgstr "不可借阅"
 msgid "借阅成功"
 msgstr "借阅成功"
 
-#: .\librarian\templates\post_news.html:153
+#: .\librarian\templates\post_news.html:166
 msgid "标题或内容为空！"
 msgstr "标题或内容为空！"
 
-#: .\librarian\templates\post_news.html:160
+#: .\librarian\templates\post_news.html:173
 msgid "发布成功"
 msgstr "发布成功"
 
-#: .\librarian\templates\post_news.html:163
+#: .\librarian\templates\post_news.html:176
 msgid "发布失败!"
 msgstr "发布失败!"
 
@@ -1158,9 +1241,6 @@ msgstr "付费用户"
 
 #~ msgid "发布日期"
 #~ msgstr "发布日期"
-
-#~ msgid "罚金"
-#~ msgstr "罚金"
 
 #~ msgid "获取失败!"
 #~ msgstr "获取失败!"
