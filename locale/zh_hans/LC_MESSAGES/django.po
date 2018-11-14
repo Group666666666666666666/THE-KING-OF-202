@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 17:44+0800\n"
+"POT-Creation-Date: 2018-11-14 21:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,6 @@ msgstr "修改本账户密码"
 
 #: .\administrator\templates\admin2.html:203
 #: .\librarian\templates\del_message.html:189
-#: .\librarian\templates\income_chart.html:145
 #: .\librarian\templates\income_record.html:149
 #: .\librarian\templates\index.html:177 .\librarian\templates\index.html:188
 #: .\librarian\templates\index.html:192
@@ -234,7 +233,6 @@ msgstr "修改失败!"
 #: .\librarian\templates\del_book.html:65
 #: .\librarian\templates\del_message.html:161
 #: .\librarian\templates\edit_news.html:102
-#: .\librarian\templates\income_chart.html:105
 #: .\librarian\templates\income_record.html:105
 #: .\librarian\templates\index.html:138 .\librarian\templates\post_news.html:99
 #: .\librarian\templates\post_news_record.html:115
@@ -655,19 +653,19 @@ msgstr "提交"
 msgid "修改成功"
 msgstr "修改成功"
 
-#: .\librarian\templates\income_chart.html:126
 #: .\librarian\templates\income_record.html:126
 #: .\librarian\templates\manager_page.html:191
 msgid "收入记录"
 msgstr "收入记录"
 
-#: .\librarian\templates\income_chart.html:133
+#: .\librarian\templates\income_record.html:131
+msgid "改变视图"
+msgstr "改变视图"
+
 #: .\librarian\templates\income_record.html:137
 msgid "查看日期："
 msgstr "查看日期："
 
-#: .\librarian\templates\income_chart.html:136
-#: .\librarian\templates\income_chart.html:263
 #: .\librarian\templates\income_record.html:140
 #: .\librarian\templates\income_record.html:298
 #: .\librarian\templates\income_record.html:388
@@ -675,37 +673,29 @@ msgstr "查看日期："
 msgid "日"
 msgstr "日"
 
-#: .\librarian\templates\income_chart.html:139
-#: .\librarian\templates\income_chart.html:265
 #: .\librarian\templates\income_record.html:143
 #: .\librarian\templates\income_record.html:489
 #: .\librarian\templates\income_record.html:629
 msgid "周"
 msgstr "周"
 
-#: .\librarian\templates\income_chart.html:142
-#: .\librarian\templates\income_chart.html:267
 #: .\librarian\templates\income_record.html:146
 #: .\librarian\templates\income_record.html:631
 msgid "月"
 msgstr "月"
 
-#: .\librarian\templates\income_chart.html:150
 #: .\librarian\templates\income_record.html:154
 msgid "总收入:"
 msgstr "总收入:"
 
-#: .\librarian\templates\income_chart.html:152
 #: .\librarian\templates\income_record.html:156
 msgid "罚金收入:"
 msgstr "罚金收入:"
 
-#: .\librarian\templates\income_chart.html:154
 #: .\librarian\templates\income_record.html:158
 msgid "保证金收入:"
 msgstr "保证金收入:"
 
-#: .\librarian\templates\income_chart.html:164
 #: .\librarian\templates\income_record.html:169
 #: .\librarian\templates\manager_page.html:290
 #: .\librarian\templates\manager_page.html:311
@@ -717,7 +707,6 @@ msgstr "保证金收入:"
 msgid "订单号"
 msgstr "订单号"
 
-#: .\librarian\templates\income_chart.html:165
 #: .\librarian\templates\income_record.html:170
 #: .\librarian\templates\manager_page.html:248
 #: .\librarian\templates\manager_page.html:354
@@ -725,24 +714,20 @@ msgstr "订单号"
 msgid "用户名"
 msgstr "用户名"
 
-#: .\librarian\templates\income_chart.html:166
 #: .\librarian\templates\income_record.html:171
 msgid "订单时间"
 msgstr "订单时间"
 
-#: .\librarian\templates\income_chart.html:167
 #: .\librarian\templates\income_record.html:172
 msgid "收入类型"
 msgstr "收入类型"
 
-#: .\librarian\templates\income_chart.html:168
 #: .\librarian\templates\income_record.html:173
 #: .\librarian\templates\manager_page.html:356
 #: .\reader\templates\user_message.html:334
 msgid "收款人"
 msgstr "收款人"
 
-#: .\librarian\templates\income_chart.html:169
 #: .\librarian\templates\income_record.html:174
 msgid "收入金额"
 msgstr "收入金额"
@@ -889,8 +874,8 @@ msgid "付费记录"
 msgstr "付费记录"
 
 #: .\librarian\templates\manager_page.html:234
-msgid "请输入读者账户："
-msgstr "请输入读者账户："
+msgid "请输入读者账户名或ID"
+msgstr "请输入读者账户名或ID"
 
 #: .\librarian\templates\manager_page.html:247
 #: .\reader\templates\user_message.html:200

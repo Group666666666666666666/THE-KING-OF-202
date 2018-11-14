@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 17:47+0800\n"
+"POT-Creation-Date: 2018-11-14 21:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,6 @@ msgstr "Change Account Password"
 
 #: .\administrator\templates\admin2.html:203
 #: .\librarian\templates\del_message.html:189
-#: .\librarian\templates\income_chart.html:145
 #: .\librarian\templates\income_record.html:149
 #: .\librarian\templates\index.html:177 .\librarian\templates\index.html:188
 #: .\librarian\templates\index.html:192
@@ -233,7 +232,6 @@ msgstr "Edit Failure!"
 #: .\librarian\templates\del_book.html:65
 #: .\librarian\templates\del_message.html:161
 #: .\librarian\templates\edit_news.html:102
-#: .\librarian\templates\income_chart.html:105
 #: .\librarian\templates\income_record.html:105
 #: .\librarian\templates\index.html:138 .\librarian\templates\post_news.html:99
 #: .\librarian\templates\post_news_record.html:115
@@ -654,19 +652,19 @@ msgstr "Submit"
 msgid "修改成功"
 msgstr "Edit Successful!"
 
-#: .\librarian\templates\income_chart.html:126
 #: .\librarian\templates\income_record.html:126
 #: .\librarian\templates\manager_page.html:191
 msgid "收入记录"
 msgstr "Income Record"
 
-#: .\librarian\templates\income_chart.html:133
+#: .\librarian\templates\income_record.html:131
+msgid "改变视图"
+msgstr "Change View"
+
 #: .\librarian\templates\income_record.html:137
 msgid "查看日期："
 msgstr "View Date:"
 
-#: .\librarian\templates\income_chart.html:136
-#: .\librarian\templates\income_chart.html:263
 #: .\librarian\templates\income_record.html:140
 #: .\librarian\templates\income_record.html:298
 #: .\librarian\templates\income_record.html:388
@@ -674,37 +672,29 @@ msgstr "View Date:"
 msgid "日"
 msgstr "Day"
 
-#: .\librarian\templates\income_chart.html:139
-#: .\librarian\templates\income_chart.html:265
 #: .\librarian\templates\income_record.html:143
 #: .\librarian\templates\income_record.html:489
 #: .\librarian\templates\income_record.html:629
 msgid "周"
 msgstr "Week"
 
-#: .\librarian\templates\income_chart.html:142
-#: .\librarian\templates\income_chart.html:267
 #: .\librarian\templates\income_record.html:146
 #: .\librarian\templates\income_record.html:631
 msgid "月"
 msgstr "Month"
 
-#: .\librarian\templates\income_chart.html:150
 #: .\librarian\templates\income_record.html:154
 msgid "总收入:"
 msgstr "Total income:"
 
-#: .\librarian\templates\income_chart.html:152
 #: .\librarian\templates\income_record.html:156
 msgid "罚金收入:"
 msgstr "Fine income:"
 
-#: .\librarian\templates\income_chart.html:154
 #: .\librarian\templates\income_record.html:158
 msgid "保证金收入:"
 msgstr "Deposit income:"
 
-#: .\librarian\templates\income_chart.html:164
 #: .\librarian\templates\income_record.html:169
 #: .\librarian\templates\manager_page.html:290
 #: .\librarian\templates\manager_page.html:311
@@ -716,7 +706,6 @@ msgstr "Deposit income:"
 msgid "订单号"
 msgstr "Order Id"
 
-#: .\librarian\templates\income_chart.html:165
 #: .\librarian\templates\income_record.html:170
 #: .\librarian\templates\manager_page.html:248
 #: .\librarian\templates\manager_page.html:354
@@ -724,24 +713,20 @@ msgstr "Order Id"
 msgid "用户名"
 msgstr "User name"
 
-#: .\librarian\templates\income_chart.html:166
 #: .\librarian\templates\income_record.html:171
 msgid "订单时间"
 msgstr "Order Time"
 
-#: .\librarian\templates\income_chart.html:167
 #: .\librarian\templates\income_record.html:172
 msgid "收入类型"
 msgstr "Income Type"
 
-#: .\librarian\templates\income_chart.html:168
 #: .\librarian\templates\income_record.html:173
 #: .\librarian\templates\manager_page.html:356
 #: .\reader\templates\user_message.html:334
 msgid "收款人"
 msgstr "Payee"
 
-#: .\librarian\templates\income_chart.html:169
 #: .\librarian\templates\income_record.html:174
 msgid "收入金额"
 msgstr "Income Amount"
@@ -888,8 +873,8 @@ msgid "付费记录"
 msgstr "Pay Record"
 
 #: .\librarian\templates\manager_page.html:234
-msgid "请输入读者账户："
-msgstr "Please input reader name:"
+msgid "请输入读者账户名或ID"
+msgstr "Please input reader name or ID"
 
 #: .\librarian\templates\manager_page.html:247
 #: .\reader\templates\user_message.html:200

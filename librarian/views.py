@@ -992,7 +992,12 @@ def manage_user_api(request):
             if user:
                 user_id = user.user_id
         except:
-            return JsonResponse({"result": False, "msg": "User Name Invalid!"})
+            try:
+                user = User.objects.get(user_id=username)
+                if user:
+                    user_id = user.user_id
+            except:
+                return JsonResponse({"result": False, "msg": "User Name Invalid!"})
         reserve_order_list = ReserveOrder.objects.filter(user_id=user_id, expire=False,).order_by('-borrow_time')
         borrow_order_list = BorrowOrder.objects.filter(user_id=user_id, is_return=False).order_by('-borrow_time')
         returned_order_list = BorrowOrder.objects.filter(user_id=user_id, is_return=True).order_by('-return_time')
