@@ -173,7 +173,8 @@ isbn_fouces();
                         document.getElementById("image_url").value = result["image_url"];
                         //document.getElementById("type").value = result["type"];
                         document.getElementById("author").value = result["author"];
-                        document.getElementById("price").value = result["price"];
+                        var price = result["price"].replace(/[^0-9.]/ig,"");
+                        document.getElementById("price").value = price;
                     } else {
                         alert("{% trans 'ISBN查询失败' %}")
                     }
@@ -208,7 +209,8 @@ isbn_fouces();
         book_message['total_num'] = total_num;
         book_message['type'] = type;
         book_message['place'] = place;
-        book_message['price'] = price;
+        book_message['price'] = price
+        ;
         $.post('/add_book/api/', book_message, function (result, statue) {
             if(statue === "success"){
                 if(result["result"] === false){

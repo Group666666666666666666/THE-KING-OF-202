@@ -133,7 +133,7 @@ $(document).ready(function(){
             <a class="navbar-brand">Bibliosoft</a>
         </div>    
         <div> 
-            <ul class="nav navbar-nav navbar-right" id="menu" style="position:absolut; left:0px; top:0px">
+            <ul class="nav navbar-nav navbar-right" id="menu" style="left:0px; top:0px">
                 <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> {% trans '返回首页' %}</a></li>
             </ul> 
         </div> 
@@ -313,6 +313,7 @@ $(document).ready(function(){
                 {% trans '否' %}
                 {% endif %}
             </td>
+            <td><label class="btn btn-success btn-sm" onclick="">{% trans '取消预约' %}</label></td>
 		</tr>
     {% endfor %}
 	</tbody>

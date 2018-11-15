@@ -496,6 +496,20 @@ def update_book_message_page(request):
         return HttpResponseRedirect(reverse("index"))
 
 
+def edit_type_location_page(request):
+    '''
+    编辑图书类别及位置
+    :param request:
+    :return:
+    '''
+    username = request.session.get('username', "None")
+    if username == 'root':
+        if request.method == "GET":
+            return render(request, 'edit_info.html')
+    else:
+        return HttpResponseRedirect(reverse("index"))
+
+
 def search_book_api(request):
     '''
     查询书籍API

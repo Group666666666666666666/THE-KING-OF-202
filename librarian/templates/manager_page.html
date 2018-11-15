@@ -182,10 +182,11 @@ position: relative;
                     <a style="cursor: pointer;">
                         <span class="fa fa-user fa-lg"></span>  {{ librarian_name }} <span class="caret"></span>
                     </a>
-                    <ul style="text-align: center">
+                    <ul style="text-align: center" id="manage">
                         <li><a href="{% url 'manager_add_reader' %}">{% trans '添加读者' %}</a></li>
                         <li><a href="{% url 'add_book' %}">{% trans '添加书籍' %}</a></li>
                         <li><a href="{% url 'update_book_message' %}">{% trans '编辑书籍' %}</a></li>
+                        <li><a href="{% url 'edit_type_location' %}">{% trans '编辑信息' %}</a></li>
                         <li><a href="{% url 'manager_delete_book' %}">{% trans '删除书籍' %}</a></li>
                         <li><a href="{% url 'manager_del_record' %}">{% trans '删书记录' %}</a></li>
                         <li><a href="{% url 'manager_income_record' %}">{% trans '收入记录' %}</a></li>
@@ -471,18 +472,21 @@ Copyright &copy;2018 Library
         var td_3 = document.createElement("td");
         var debt_button = document.createElement("button");
         debt_button.innerText = "{% trans '缴纳' %}";
+        debt_button.className = "btn btn-success btn-sm";
         debt_button.setAttribute("onclick", "pay_debt("+"\""+user["user_name"]+"\""+")");
         td_3.appendChild(debt_button);
 
         var td_4 = document.createElement("td");
         var delete_user_button = document.createElement("button");
         delete_user_button.innerText = "{% trans '删除' %}";
+        delete_user_button.className = "btn btn-success btn-sm";
         delete_user_button.setAttribute("onclick", "delete_reader("+"\""+user["user_name"]+"\""+")");
         td_4.appendChild(delete_user_button);
 
         var td_5 = document.createElement("td");
         var edit_user_button = document.createElement("button");
         edit_user_button.innerText = "{% trans '编辑' %}";
+        edit_user_button.className = "btn btn-success btn-sm";
         edit_user_button.setAttribute("onclick", "$(window).attr('location', '/update_reader/?username="+user["user_name"]+"&email="+user["email"]+"');");
         //edit_user_button.setAttribute("onclick", "window.open('/update_reader/?username="+user["user_name"]+"&email="+user["email"]+"')");
         td_5.appendChild(edit_user_button);
@@ -512,6 +516,7 @@ Copyright &copy;2018 Library
             button.setAttribute("name", "借阅");
             button.setAttribute("onclick", "borrow_book("+reserve_orders[i]["reserve_order_id"].toString()+")");
             button.innerText = "{%  trans '借阅' %}";
+            button.className = "btn btn-success btn-sm";
             td_4.appendChild(button);
             tr.appendChild(td);
             tr.appendChild(td_1);
@@ -545,9 +550,11 @@ Copyright &copy;2018 Library
             var button = document.createElement("button");
             button.setAttribute("onclick", "return_book("+borrow_orders[i]["borrow_order_id"].toString()+")");
             button.innerText = "{%  trans '归还' %}";
+            button.className = "btn btn-success btn-sm";
             var button1 = document.createElement("button");
             button1.setAttribute("onclick", "send_mail("+borrow_orders[i]["borrow_order_id"].toString()+")");
             button1.innerText = "{%  trans '发邮件' %}";
+            button1.className = "btn btn-success btn-sm";
             td_5.appendChild(button);
             td_6.appendChild(button1);
             tr.appendChild(td);
@@ -674,7 +681,8 @@ Copyright &copy;2018 Library
                 if(book_status===0){
                     var button = document.createElement("button");
                     button.setAttribute("onclick", "directly_borrow_book("+book_id+")");
-                    button.innerHTML = "<font style=\"color:blue;\">{%  trans '借阅' %}</font>";
+                    button.innerHTML = "{%  trans '借阅' %}";
+                    button.className = "btn btn-success btn-sm";
                     td_4.appendChild(button)
                 }else{
                     td_4.innerHTML ="<font color=red>{% trans '不可借阅' %}</font>";

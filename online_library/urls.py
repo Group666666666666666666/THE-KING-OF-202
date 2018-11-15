@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^manager/get_readerHis/$', librarian_views.get_reader_history, name="manager_get_readerHis"),
     url(r'^manager/get_adminPsw/$', administrator_views.get_adminPsw, name="manager_get_adminPsw"),
     url(r'^manager/update_book_message/$', librarian_views.update_book_message_page, name="update_book_message"),
+    url(r'^manager/edit_type_location/$', librarian_views.edit_type_location_page, name="edit_type_location"),
     # tyr admin更新超级管理员密码
     url(r'^admin/change_passwd/$', administrator_views.admin_change_password, name='admin_change_passwd'),
     url(r'^manager/update_adminPsw/$', administrator_views.update_adminPsw, name="manager_update_adminPsw"),
