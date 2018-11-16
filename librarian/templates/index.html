@@ -191,33 +191,11 @@
                             <li class="searchItem" id="ALL" >
                                 <a>{% trans '全部' %}</a>
                             </li>
-                            <li class="searchItem" id="A">
-                                <a>{% trans '教育' %}</a>
-                            </li>
-                            <li class="searchItem" id="B">
-                                <a>{% trans '计算机' %}</a>
-                            </li>
-                            <li class="searchItem" id="C">
-                                <a>{% trans '文学' %}</a>
-                            </li>
-                            <li class="searchItem" id="D">
-                                <a>{% trans '哲学' %}</a>
-                            </li>
-                            <li class="searchItem" id="E">
-                                <a>{% trans '语言' %}</a>
-                            </li>
-                            <li class="searchItem" id="F">
-                                <a>{% trans '历史' %}</a>
-                            </li>
-                            <li class="searchItem" id="G">
-                                <a>{% trans '政治' %}</a>
-                            </li>
-                            <li class="searchItem" id="H">
-                                <a>{% trans '经济' %}</a>
-                            </li>
-                            <li class="searchItem" id="I">
-                                <a>{% trans '其他' %}</a>
-                            </li>
+                            {% for type in all_book_types %}
+                                <li class="searchItem" id="{{ type.book_type }}" >
+                                    <a>{{ type.book_type }}</a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                     <input type="text" class="searchInput" style="vertical-align:middle;width:500px;height:35px;" id="search_text" />

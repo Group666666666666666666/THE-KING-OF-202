@@ -37,7 +37,7 @@
 	box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
 	color: #222;
 }
-        #type {
+        .type_sel {
             {#width: 180px;#}
             text-align: center;
             width: 178px;
@@ -110,17 +110,11 @@
                     <i class="fa fa-clone"> {% trans '类型' %} </i>
                     <br>
 {#                    <input type="text" name="type" id="type">#}
-                    <select name="type" id="type">
+                    <select name="type" id="type" class="type_sel">
                         <option value="NULL">- - -</option>
-                        <option value="A">{% trans '教育' %}</option>
-                        <option value="B">{% trans '计算机' %}</option>
-                        <option value="C">{% trans '文学' %}</option>
-                        <option value="D">{% trans '哲学' %}</option>
-                        <option value="E">{% trans '语言' %}</option>
-                        <option value="F">{% trans '历史' %}</option>
-                        <option value="G">{% trans '政治' %}</option>
-                        <option value="H">{% trans '经济' %}</option>
-                        <option value="I">{% trans '其他' %}</option>
+                        {% for type in all_book_types %}
+                            <option value="{{ type.book_type }}">{{ type.book_type }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
@@ -131,7 +125,12 @@
                 <div class="form-group">
                     <i class="fa fa-location-arrow"> {% trans '地点' %} </i>
                     <br>
-                    <input type="text" name="place" id="place">
+                    <select name="location" id="location" class="type_sel">
+                        <option value="NULL">- - -</option>
+                        {% for loc in all_book_locations %}
+                            <option value="{{ loc.book_location }}">{{ loc.book_location }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group col-md-offset-9">
                     <button type="submit" class="btn pull-right" name="submit" onclick="add_book()">{% trans '添加图书' %}</button>

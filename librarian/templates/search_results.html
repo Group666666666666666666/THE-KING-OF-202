@@ -98,15 +98,9 @@
                             <input style="width: 410px;visibility: hidden"  >
                                 <select name="find_code" id="find_code" style="height: 26px;">
                                     <option value="ALL">{% trans '全部' %}</option>
-                                    <option value="A">{% trans '教育' %}</option>
-                                    <option value="B">{% trans '计算机' %}</option>
-                                    <option value="C">{% trans '文学' %}</option>
-                                    <option value="D">{% trans '哲学' %}</option>
-                                    <option value="E">{% trans '语言' %}</option>
-                                    <option value="F">{% trans '历史' %}</option>
-                                    <option value="G">{% trans '政治' %}</option>
-                                    <option value="H">{% trans '经济' %}</option>
-                                    <option value="I">{% trans '其他' %}</option>
+                                    {% for type in all_book_types %}
+                                        <option value="{{ type.book_type }}">{{ type.book_type }}</option>
+                                    {% endfor %}
                                 </select>
                             <input autocomplete="off" style="width:30%" name="request" value="{{ search_text }}" id="find_text"> &nbsp;
                             <span id="refine"></span>
