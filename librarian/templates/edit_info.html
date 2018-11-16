@@ -246,6 +246,7 @@ var old_name;
                 label.setAttribute("onclick","edit_info("+type+",this)");
                 //panel_body[type].insertBefore(label,obj);
                 panel_body[type].appendChild(label);
+                add[type].value = '';
             }else {
                 alert("{% trans "添加失败" %}");
             }

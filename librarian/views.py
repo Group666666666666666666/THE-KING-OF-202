@@ -157,7 +157,10 @@ def directly_borrow_book_api(request):
         if request.method == 'POST':
             book_id = request.POST['book_id']
             user_name_k = request.POST["user_name"]
-            user = User.objects.get(user_name=user_name_k)
+            try:
+                user = User.objects.get(user_name=user_name_k)
+            except:
+                user = User.objects.get(user_id=user_name_k)
             user_id = user.user_id
             book = AllBook.objects.get(book_id=book_id)
             reserve_num = ReserveOrder.objects.filter(user=user_id, expire=False).count()
@@ -205,7 +208,7 @@ def book_detail_api(request):
         book = AllBook.objects.get(book_id=book_id)
         if book:
             return JsonResponse({"result": True, "book_id": book.book_id, "book_name": book.the_book.book_name,
-                                 "book_status": book.status, "book_place": book.the_book.place})
+                                 "book_status": book.status, "book_place": book.the_book.place.book_location})
     except Exception as e:
         return JsonResponse({"result": False, "msg": "can not find this book"})
 
@@ -1266,10 +1269,10 @@ def get_book(request):
                 book = Book.objects.get(isbn=isbn)
             except:
                 return JsonResponse({"result": False})
-            response = JsonResponse({'result': True, 'id': book.id,'isbn': isbn, "price": book.price,
+            response = JsonResponse({'result': True, 'id': book.id, 'isbn': isbn, "price": book.price,
                                      'author': book.author, 'book_name': book.book_name,
-                                     'place': book.place, "total_num": book.total_num,
-                                     'type': book.type
+                                     'place': book.place.book_location, "total_num": book.total_num,
+                                     'type': book.type.book_type
                                      })
             return response
 
@@ -1599,9 +1602,25 @@ def add_type_and_location_api(request):
                 type = request.GET["type"]
 
                 if type == '0':  # 如果添加的是书的类别
-                    BookType.objects.create(book_type=type_or_location)
+                    try:
+                        temp = BookType.objects.get(book_type=type_or_location, is_deleted=True)
+                        if temp:
+                            temp.is_deleted = False
+                            temp.save()
+                        else:
+                            BookType.objects.create(book_type=type_or_location)
+                    except Exception as e:
+                        BookType.objects.create(book_type=type_or_location)
                 elif type == '1':  # 如果添加的是书的位置
-                    BookLocation.objects.create(book_location=type_or_location)
+                    try:
+                        temp = BookLocation.objects.get(book_location=type_or_location, is_deleted=True)
+                        if temp:
+                            temp.is_deleted = False
+                            temp.save()
+                        else:
+                            BookLocation.objects.create(book_location=type_or_location)
+                    except Exception as e:
+                        BookLocation.objects.create(book_location=type_or_location)
                 else:
                     return JsonResponse({'result': False})
 
@@ -1650,9 +1669,13 @@ def delete_type_and_location_api(request):
                 type = request.GET["type"]
 
                 if type == '0':  # 如果删除的是书的类别
-                    BookType.objects.get(book_type=type_or_location).delete()
+                    temp = BookType.objects.get(book_type=type_or_location)
+                    temp.is_deleted = True
+                    temp.save()
                 elif type == '1':  # 如果删除的是书的位置
-                    BookLocation.objects.get(book_location=type_or_location).delete()
+                    temp = BookLocation.objects.get(book_location=type_or_location)
+                    temp.is_deleted = True
+                    temp.save()
                 else:
                     return JsonResponse({'result': False})
 
