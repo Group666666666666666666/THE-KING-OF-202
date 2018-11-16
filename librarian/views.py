@@ -525,8 +525,8 @@ def edit_type_location_page(request):
     username = request.session.get('username', "None")
     if username == 'root':
         if request.method == "GET":
-            all_book_type = BookType.objects.all()
-            all_book_location = BookLocation.objects.all()
+            all_book_type = BookType.objects.filter(is_deleted=False)
+            all_book_location = BookLocation.objects.filter(is_deleted=False)
             return render(request, 'edit_info.html', {'all_book_type': all_book_type,
                                                       'all_book_location': all_book_location})
     else:
