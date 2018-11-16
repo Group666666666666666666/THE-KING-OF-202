@@ -141,7 +141,7 @@
                         {% endif %}
                     </td>
                     -->
-                    <td>{{ book.the_book.place }}</td>
+                    <td>{{ book.the_book.place.book_location }}</td>
                     <td align="center"><button id="{{ book.book_id }}" class="reserve"><font style="color: blue">{% trans '预约' %}</font></button></td>
                     <!--
                     {% if not administrator %}
@@ -168,7 +168,7 @@
                         <font color="red">{% trans '已删除' %}</font>
                         {% endif %}
                     </td>
-                    <td>{{ book.the_book.place }}</td>
+                    <td>{{ book.the_book.place.book_location }}</td>
                 {% endif %}
                 </tr>
             {% endfor %}

@@ -150,7 +150,7 @@
                 <div class="form-group">
                     <i class="fa fa-location-arrow"> {% trans '地点' %} </i>
                     <br>
-                    <select name="location" id="location" class="type_sel">
+                    <select name="place" id="place" class="type_sel">
                         <option value="NULL">- - -</option>
                         {% for loc in all_book_locations %}
                             <option value="{{ loc.book_location }}">{{ loc.book_location }}</option>
@@ -227,15 +227,9 @@ bookid_fouces()
                 $.get("{% url 'get_bookbyid_api' %}", {"bookid": bookid},function (result, statue) {
                     if (result['result']=== true){
                         document.getElementById("book_name").value = result["book_name"];
-                        var all_types = document.getElementById("type").children;
-                        for(i=0;i<all_types.length;i++){  //选定类型
-                            if(all_types[i].value == result["type"]){
-                                all_types[i].selected = true;
-                                break;
-                            }
-                        }
+                        document.getElementById("type").value = result['type'];
+                        document.getElementById("place").value = result['place'];
                         document.getElementById("isbn").value = result["isbn"];
-
                         document.getElementById("author").value = result["author"];
                         document.getElementById("place").value = result["place"];
                         document.getElementById("total_num").value = result["total_num"];

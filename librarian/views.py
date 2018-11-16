@@ -603,16 +603,20 @@ def search_book(request):
         if book_type == "ALL":
             result = Book.objects.filter(book_name__contains=book_name) | Book.objects.filter(author__contains=book_name)
         else:
+            type = BookType.objects.get(book_type=book_type)
+
             if book_name == "":
-                result = Book.objects.filter(type=book_type)
+                result = Book.objects.filter(type=type)
             else:
-                result = Book.objects.filter(book_name__contains=book_name, type=book_type)\
-                         | Book.objects.filter(author__contains=book_name, type=book_type)
+                result = Book.objects.filter(book_name__contains=book_name, type=type)\
+                         | Book.objects.filter(author__contains=book_name, type=type)
 
-        return render(request, 'search_results.html', {"book_list": result, "administrator": is_administrator,
-                "username": username, 'search_text': book_name, 'search_type': book_type, 'all_book_types': all_book_types})
+        return render(request, 'search_results.html',
+                      {"book_list": result, "administrator": is_administrator, "username": username,
+                       'search_text': book_name, 'search_type': book_type, 'all_book_types': all_book_types})
 
-    except :
+    except Exception as e:
+        print(e)
         return JsonResponse({"result": False, "msg": "Query error!"})  # 查询出错
 
 
@@ -1169,8 +1173,8 @@ def add_book_api(request):
             image_url = request.POST['image_url']
             total_num = request.POST['total_num']
             price = request.POST['price']
-            type = request.POST["type"]
-            place = request.POST['place']
+            type = BookType.objects.get(book_type=request.POST["type"])
+            place = BookLocation.objects.get(book_location=request.POST['place'])
 
             if image_url != '':
                 image_result = requests.get(image_url)
@@ -1273,7 +1277,7 @@ def get_book(request):
         return HttpResponseRedirect(reverse("index"))
 
 
-def get_book_byid(request):
+def get_book_by_id(request):
     '''
     获取书的信息
     :param request:
@@ -1282,16 +1286,16 @@ def get_book_byid(request):
     username = request.session.get('username', "None")
     if username == 'root':
         if request.method == "GET":
-            isbn = request.GET["bookid"]
+            book_id = request.GET["bookid"]
 
             try:
-                book = Book.objects.get(id=isbn)
+                book = Book.objects.get(id=book_id)
             except:
                 return JsonResponse({"result": False})
             response = JsonResponse({'result': True, 'isbn': book.isbn, "price": book.price,
                                      'author': book.author, 'book_name': book.book_name,
-                                     'place': book.place, "total_num": book.total_num,
-                                     'type': book.type
+                                     'place': book.place.book_location, "total_num": book.total_num,
+                                     'type': book.type.book_type
                                      })
             return response
 
@@ -1313,14 +1317,13 @@ def update_book(request):
                 #book = Book.objects.filter(isbn=isbn).first()
                 book = Book.objects.get(id=id)
                 total_num = request.GET["total_num"]
-                place = request.GET['place']
-                type = request.GET['type']
+                place = BookLocation.objects.get(book_location=request.GET['place'])
+                type = BookType.objects.get(book_type=request.GET['type'])
                 img_str = ""
                 if book:
-                    if not place is "":
-                        book.place = place
-                    if not type is "":
-                        book.type = type
+                    book.place = place
+                    book.type = type
+
                     if not total_num is "":
                         add_num = int(total_num) - int(book.total_num)
                         if add_num >= 0:

@@ -142,13 +142,11 @@
                               </tr>
                               <tr>
                                   <td class="label1">{% trans '地点' %}：</td>
-                                  <td class="content" valign="top">{{ book.place }}</td>
+                                  <td class="content" valign="top">{{ book.place.book_location }}</td>
                               </tr>
                               <tr>
                                   <td class="label1">{% trans '类型' %}：</td>
-                                  <td class="content" valign="top">
-                                      {% trans book.get_type_display %}
-                                  </td>
+                                  <td class="content" valign="top">{% trans book.type.book_type %}</td>
                               </tr>
                               {#  -----------条形码显示示例----------- #}
 {#                                <img src="/media/{{ book.isbn }}.png" width="300px"/>#}

@@ -9,7 +9,7 @@ class BookType(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # 图书位置
@@ -18,7 +18,7 @@ class BookLocation(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Book(models.Model):
@@ -122,7 +122,7 @@ class AutoUpdateDB(models.Model):
     updated_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # 图书删除记录

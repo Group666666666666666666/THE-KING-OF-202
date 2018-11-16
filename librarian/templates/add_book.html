@@ -125,7 +125,7 @@
                 <div class="form-group">
                     <i class="fa fa-location-arrow"> {% trans '地点' %} </i>
                     <br>
-                    <select name="location" id="location" class="type_sel">
+                    <select name="place" id="place" class="type_sel">
                         <option value="NULL">- - -</option>
                         {% for loc in all_book_locations %}
                             <option value="{{ loc.book_location }}">{{ loc.book_location }}</option>
