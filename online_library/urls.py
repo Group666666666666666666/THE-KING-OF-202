@@ -120,10 +120,19 @@ urlpatterns = [
     # 查看通知正文
     url(r'^view_notice_content/(?P<notice_id>\d+)/$', librarian_views.view_notice_content, name="view_notice_content"),
     # 查找指定月、周、日的收入
-    url(r'^manager/search_income_record/api/$', librarian_views.search_income_record_api, name="search_income_record_api"),
+    url(r'^manager/search_income_record/api/$', librarian_views.search_income_record_api,
+        name="search_income_record_api"),
     # 用户取消预约订单
-    url(r'^user/cancel_reserve/api/$', reader_views.cancel_reserve_api, name="cancel_reserve_api")
-
+    url(r'^user/cancel_reserve/api/$', reader_views.cancel_reserve_api, name="cancel_reserve_api"),
+    # 管理员添加类别和地点
+    url(r'^manager/add_type_and_location/api', librarian_views.add_type_and_location_api,
+        name='add_type_and_location_api'),
+    # 管理员编辑类别和地点
+    url(r'^manager/edit_type_and_location/api', librarian_views.edit_type_and_location_api,
+        name='edit_type_and_location_api'),
+    # 管理员删除类别和地点
+    url(r'^manager/delete_type_and_location/api', librarian_views.delete_type_and_location_api,
+        name='delete_type_and_location_api'),
 
 ]
 

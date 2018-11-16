@@ -3,17 +3,32 @@ from reader.models import User
 from administrator.models import Administrator
 
 
-class Book(models.Model):
-    TYPE = (('A', '教育'), ('B', '计算机'), ('C', '文学'), ('D', '哲学'), ('E', '语言'),
-            ('F', '历史'), ('G', '政治'), ('H', '经济'), ('I', '其他'))
+# 图书类别
+class BookType(models.Model):
+    book_type = models.CharField(max_length=50, null=False, unique=True)
+    is_deleted = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.id
+
+
+# 图书位置
+class BookLocation(models.Model):
+    book_location = models.CharField(max_length=20, null=False, unique=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.id
+
+
+class Book(models.Model):
     author = models.CharField(max_length=50)
     isbn = models.IntegerField(null=True, unique=True)
     total_num = models.IntegerField(null=False)
     available_num = models.IntegerField(null=False)
     book_name = models.CharField(max_length=100, null=False)
-    type = models.CharField(max_length=1, choices=TYPE)
-    place = models.CharField(max_length=50, null=False)
+    type = models.ForeignKey(BookType, related_name="books")
+    place = models.ForeignKey(BookLocation, related_name="books")
     image_url = models.CharField(max_length=100, default='None')
     price = models.CharField(max_length=100, default='100')
 
@@ -127,18 +142,5 @@ class BookDelHistory(models.Model):
         return str(self.id)
 
 
-class BookType(models.Model):
-    book_type = models.CharField(max_length=50, null=False, unique=True)
-    is_deleted = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.id
-
-
-class BookLocation(models.Model):
-    book_location = models.CharField(max_length=20, null=False, unique=True)
-    is_deleted = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.id
 

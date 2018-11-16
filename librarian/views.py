@@ -70,13 +70,17 @@ def index(request):
     for i in range(len(notices)):  # 去掉回车换行，换成空格
         notices[i].content = notices[i].content.replace("\n", " ")
         notices[i].content = notices[i].content.replace("\r", " ")
+
+    # 获取所有书的分类
+    all_book_types = BookType.objects.all()
+
     if username != "None":
         if username == 'anti_man':  # 如果是系统管理员，不能在主页登录
-            message = {'login': False, "username": None, 'notices': notices}
+            message = {'login': False, "username": None, 'notices': notices, 'all_book_types': all_book_types}
         else:
-            message = {'login': True, "username": username, 'notices': notices}
+            message = {'login': True, "username": username, 'notices': notices, 'all_book_types': all_book_types}
     else:
-        message = {'login': False, "username": username, 'notices': notices}
+        message = {'login': False, "username": username, 'notices': notices, 'all_book_types': all_book_types}
     return render(request, 'index.html', message, )
 
 
@@ -214,7 +218,10 @@ def add_book(request):
     '''
     username = request.session.get('username', "None")
     if username == 'root':
-        return render(request, 'add_book.html')
+        all_book_types = BookType.objects.all()
+        all_book_locations = BookLocation.objects.all()
+        return render(request, 'add_book.html', {'all_book_types': all_book_types,
+                                                 'all_book_locations': all_book_locations})
     else:
         return HttpResponseRedirect(reverse("index"))
 
@@ -511,7 +518,10 @@ def update_book_message_page(request):
     username = request.session.get('username', "None")
     if username == 'root':
         if request.method == "GET":
-            return render(request, 'set_book.html')
+            all_book_types = BookType.objects.all()
+            all_book_locations = BookLocation.objects.all()
+            return render(request, 'set_book.html', {'all_book_types': all_book_types,
+                                                     'all_book_locations': all_book_locations})
     else:
         return HttpResponseRedirect(reverse("index"))
 
@@ -585,6 +595,8 @@ def search_book(request):
     book_type = request.GET.get('book_type', None)
     book_name = request.GET.get('book_name', None)
 
+    all_book_types = BookType.objects.all()
+
     if book_name is None or book_type is None:
         return JsonResponse({"result": False, "msg": "Query parameter incorrect!"})  # 查询参数不正确
     try:
@@ -598,7 +610,7 @@ def search_book(request):
                          | Book.objects.filter(author__contains=book_name, type=book_type)
 
         return render(request, 'search_results.html', {"book_list": result, "administrator": is_administrator,
-                                     "username": username, 'search_text': book_name, 'search_type': book_type})
+                "username": username, 'search_text': book_name, 'search_type': book_type, 'all_book_types': all_book_types})
 
     except :
         return JsonResponse({"result": False, "msg": "Query error!"})  # 查询出错
@@ -1573,3 +1585,77 @@ def search_income_record_api(request):
                              'income_deposit': income_deposit, 'income_fine': income_fine})
     except Exception:
         return JsonResponse({"result": False, "msg": "Error!"})
+
+
+def add_type_and_location_api(request):
+    username = request.session.get('username', "None")
+    if username == 'root':
+        if request.method == "GET":
+            try:
+                type_or_location = request.GET["add_type_or_loc"]
+                type = request.GET["type"]
+
+                if type == '0':  # 如果添加的是书的类别
+                    BookType.objects.create(book_type=type_or_location)
+                elif type == '1':  # 如果添加的是书的位置
+                    BookLocation.objects.create(book_location=type_or_location)
+                else:
+                    return JsonResponse({'result': False})
+
+                return JsonResponse({'result': True})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'result': False})
+    else:
+        return HttpResponseRedirect(reverse("index"))
+
+
+def edit_type_and_location_api(request):
+    username = request.session.get('username', "None")
+    if username == 'root':
+        if request.method == "GET":
+            try:
+                type_or_location = request.GET["edit_type_or_loc"]
+                type = request.GET["type"]
+                old_name = request.GET["old_name"]
+
+                if type == '0':  # 如果修改的是书的类别
+                    temp = BookType.objects.get(book_type=old_name)
+                    temp.book_type = type_or_location
+                    temp.save()
+                elif type == '1':  # 如果修改的是书的位置
+                    temp = BookLocation.objects.get(book_location=old_name)
+                    temp.book_location = type_or_location
+                    temp.save()
+                else:
+                    return JsonResponse({'result': False})
+
+                return JsonResponse({'result': True})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'result': False})
+    else:
+        return HttpResponseRedirect(reverse("index"))
+
+
+def delete_type_and_location_api(request):
+    username = request.session.get('username', "None")
+    if username == 'root':
+        if request.method == "GET":
+            try:
+                type_or_location = request.GET["delete_type_or_loc"]
+                type = request.GET["type"]
+
+                if type == '0':  # 如果删除的是书的类别
+                    BookType.objects.get(book_type=type_or_location).delete()
+                elif type == '1':  # 如果删除的是书的位置
+                    BookLocation.objects.get(book_location=type_or_location).delete()
+                else:
+                    return JsonResponse({'result': False})
+
+                return JsonResponse({'result': True})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'result': False})
+    else:
+        return HttpResponseRedirect(reverse("index"))

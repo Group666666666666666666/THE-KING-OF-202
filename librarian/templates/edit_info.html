@@ -190,39 +190,72 @@ Copyright &copy;2018 Library
 $(function () { $('#collapseOne').collapse('show')});
 $(function () { $('#collapseTwo').collapse('show')});
 var obj_label;
+var type2;
+var old_name;
     function delete_lab() {
-        //该你写代码了 obj_label.innerText
-        alert(obj_label.innerText);
+        var delete_type_or_loc = obj_label.innerText;
         obj_label.parentNode.removeChild(obj_label);
+        alert(old_name)
+        $.get("{% url 'delete_type_and_location_api' %}", {'delete_type_or_loc': delete_type_or_loc,
+            'type': type2}, function(result){
+            if(result["result"] === true){
+                alert("{% trans "删除成功" %}");
+            }else {
+                alert("{% trans "删除失败" %}");
+            }
+        });
     }
     function change_lab() {
         //var modify = document.getElementById("modify");
-        var modify = $('#modal_body').val();
-        obj_label.innerText = modify;
+        var edit_type_or_loc = $('#modal_body').val();
+        obj_label.innerText = edit_type_or_loc;
+        $.get("{% url 'edit_type_and_location_api' %}", {'old_name': old_name, 'edit_type_or_loc': edit_type_or_loc, 'type': type2}, function(result){
+            if(result["result"] === true){
+                alert("{% trans "编辑成功" %}");
+            }else {
+                alert("{% trans "编辑失败" %}");
+            }
+        });
     }
     function edit_info(type,obj,str) {
         var modal_title = document.getElementById("modal_title");
         var modal_body = document.getElementById("modal_body");
         modal_body.value = str;
+        old_name = str;
         if(type){
             modal_title.innerText = "{% trans '图书地点' %}";
         }else{
             modal_title.innerText = "{% trans '图书类别' %}";
         }
         obj_label = obj;
+        type2 = type;
     }
     function add(type) {
         var panel_body = document.getElementsByClassName("panel-body");
         var add = document.getElementsByClassName("btn btn-warning");
             //var type_add = document.getElementById("type_add");
         var label = document.createElement("label");
+
+        var add_type_or_loc = add[type].value;
+
+        $.get("{% url 'add_type_and_location_api' %}", {'add_type_or_loc': add_type_or_loc, 'type': type}, function(result){
+            if(result["result"] === true){
+                alert("{% trans "添加成功" %}");
+            }else {
+                alert("{% trans "添加失败" %}");
+            }
+        });
+
+
         label.className = "btn btn-success";
-        label.innerText = add[type].value;
+        label.innerText = add_type_or_loc;
         label.setAttribute("data-toggle","modal");
         label.setAttribute("data-target","#myModal");
         label.setAttribute("onclick","edit_info("+type+",this,\""+label.innerText+"\")");
         //panel_body[type].insertBefore(label,obj);
         panel_body[type].appendChild(label);
+
+
 
     }
     function test(str){
