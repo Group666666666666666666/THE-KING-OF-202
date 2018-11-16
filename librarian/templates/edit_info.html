@@ -15,7 +15,7 @@
     <title>Edit Category/Location</title>
     <style type="text/css">
     body{
-        background-image:url("{% static 'images/bg1.jpg' %}");
+        background-image:url("{% static 'images/bg3.jpg' %}");
         background-attachment: fixed;
         background-repeat: no-repeat;
         background-size: cover;
@@ -107,42 +107,31 @@
     <div class="panel-group" id="accordion">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h4 class="panel-title">
-                    <label class="btn btn-info">
-                    <a data-toggle="collapse" data-parent="#accordion"
-                       href="#collapseOne">
-                        {% trans '编辑图书类别' %}
-                    </a>
-                        </label>
-                    <label class="btn btn-info">
-                    <a data-toggle="collapse" data-parent="#accordion"
-                       href="#collapseTwo">
-                        {% trans '编辑图书地点' %}
-                    </a>
-                        </label>
+                <h4 class="panel-title" style="text-align: center;">
+                    <font style="font-size: x-large;">{% trans '编辑信息' %}</font>
                 </h4>
             </div>
-            <div id="collapseOne" class="panel-collapse collapse">
+            <div id="collapseOne">
                 <div class="panel-body">
                     <h3>
                         <span style="display: inline-block; width: 60%;">{% trans '图书类别' %}</span>
-                        <input type="text" style="display: inline-block; width: 20%; height: 26px;" class="btn btn-warning">
+                        <input type="text" style="display: inline-block; width: 20%; height: 26px;    cursor: inherit" class="btn btn-warning" id="input0">
                         <label class="btn btn-success" data-toggle="tooltip" title="{% trans '新增类别' %}" onclick="add(0)"><i class="fa fa-plus"></i></label>
                     </h3>
                         {% for type in all_book_type %}
-                            <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(0,this,'{{ type.book_type }}')">{{ type.book_type }}</label>
+                            <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(0,this)">{{ type.book_type }}</label>
                         {% endfor %}
                 </div>
             </div>
-            <div id="collapseTwo" class="panel-collapse collapse">
+            <div id="collapseTwo">
                 <div class="panel-body">
                     <h3>
                         <span style="display: inline-block; width: 60%;">{% trans '图书地点' %}</span>
-                        <input type="text" style="display: inline-block; width: 20%; height: 26px;" class="btn btn-warning">
+                        <input type="text" style="display: inline-block; width: 20%; height: 26px; cursor: inherit" class="btn btn-warning" id="input1">
                         <label class="btn btn-success" data-toggle="tooltip" title="{% trans '新增地点' %}" onclick="add(1)"><i class="fa fa-plus"></i></label>
                     </h3>
                         {% for location in all_book_location %}
-                            <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(1,this,'{{ location.book_location }}')">{{ location.book_location }}</label>
+                            <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(1,this)">{{ location.book_location }}</label>
                         {% endfor %}
                 </div>
             </div>
@@ -187,19 +176,29 @@ Copyright &copy;2018 Library
 </body>
 <script>
     //默认显示
-$(function () { $('#collapseOne').collapse('show')});
-$(function () { $('#collapseTwo').collapse('show')});
+//$(function () { $('#collapseOne').collapse('show')});
+//$(function () { $('#collapseTwo').collapse('show')});
+    $(document).ready(function () {
+        $('#input0').bind("keypress",function (event) {
+            if(event.keyCode == 13){
+                add(0);
+            }
+        });
+        $("#input1").bind("keypress",function (event) {
+            if(event.keyCode == 13){
+                add(1);
+            }
+        });
+    });
 var obj_label;
 var type2;
 var old_name;
     function delete_lab() {
         var delete_type_or_loc = obj_label.innerText;
-        obj_label.parentNode.removeChild(obj_label);
-        alert(old_name)
         $.get("{% url 'delete_type_and_location_api' %}", {'delete_type_or_loc': delete_type_or_loc,
             'type': type2}, function(result){
             if(result["result"] === true){
-                alert("{% trans "删除成功" %}");
+                obj_label.parentNode.removeChild(obj_label);
             }else {
                 alert("{% trans "删除失败" %}");
             }
@@ -208,18 +207,18 @@ var old_name;
     function change_lab() {
         //var modify = document.getElementById("modify");
         var edit_type_or_loc = $('#modal_body').val();
-        obj_label.innerText = edit_type_or_loc;
         $.get("{% url 'edit_type_and_location_api' %}", {'old_name': old_name, 'edit_type_or_loc': edit_type_or_loc, 'type': type2}, function(result){
             if(result["result"] === true){
-                alert("{% trans "编辑成功" %}");
+                obj_label.innerText = edit_type_or_loc;
             }else {
                 alert("{% trans "编辑失败" %}");
             }
         });
     }
-    function edit_info(type,obj,str) {
+    function edit_info(type,obj) {
         var modal_title = document.getElementById("modal_title");
         var modal_body = document.getElementById("modal_body");
+        var str = obj.innerText;
         modal_body.value = str;
         old_name = str;
         if(type){
@@ -234,29 +233,23 @@ var old_name;
         var panel_body = document.getElementsByClassName("panel-body");
         var add = document.getElementsByClassName("btn btn-warning");
             //var type_add = document.getElementById("type_add");
-        var label = document.createElement("label");
-
         var add_type_or_loc = add[type].value;
 
         $.get("{% url 'add_type_and_location_api' %}", {'add_type_or_loc': add_type_or_loc, 'type': type}, function(result){
             if(result["result"] === true){
-                alert("{% trans "添加成功" %}");
+                var label = document.createElement("label");
+                label.className = "btn btn-success";
+                label.innerText = add_type_or_loc;
+                label.setAttribute("data-toggle","modal");
+                label.setAttribute("data-target","#myModal");
+                label.style.margin = "0px 5px 3px 0px";
+                label.setAttribute("onclick","edit_info("+type+",this)");
+                //panel_body[type].insertBefore(label,obj);
+                panel_body[type].appendChild(label);
             }else {
                 alert("{% trans "添加失败" %}");
             }
         });
-
-
-        label.className = "btn btn-success";
-        label.innerText = add_type_or_loc;
-        label.setAttribute("data-toggle","modal");
-        label.setAttribute("data-target","#myModal");
-        label.setAttribute("onclick","edit_info("+type+",this,\""+label.innerText+"\")");
-        //panel_body[type].insertBefore(label,obj);
-        panel_body[type].appendChild(label);
-
-
-
     }
     function test(str){
         var li=document.getElementById("lang").getElementsByTagName("input");
