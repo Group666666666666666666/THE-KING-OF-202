@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect, JsonResponse, FileResponse
 from django.urls import reverse
 from django.utils import timezone
 from librarian.models import Book, AllBook, BorrowOrder, ReserveOrder, Role, Notice, AutoUpdateDB, BookDelHistory, \
-    MoneyOrder
+    MoneyOrder, BookType, BookLocation
 from reader.models import User
 from administrator.models import Administrator
 import time
@@ -243,10 +243,30 @@ def delete_reader(request):
         if request.method == "GET":
             try:
                 username = request.GET["username"]
-                temp = User.objects.filter(user_name=username).delete()
+                librarian_name = request.session["admin_name"]
+                user = User.objects.get(user_name=username)
+                librarian = Administrator.objects.get(administrator_name=librarian_name)
+                borrow_order_list = BorrowOrder.objects.filter(user=user)
+                for borrow_order in borrow_order_list:
+                    if not borrow_order.is_return:
+                        return JsonResponse({'result': False, 'msg': 'Please return all the books!'})
+                    if borrow_order.debt != 0:
+                        return JsonResponse({'result': False, 'msg': 'Please pay the debt!'})
+
+                deposit_order = MoneyOrder.objects.get(order_type='D', user=user)
+
+                money_order = MoneyOrder()
+                money_order.user = user
+                money_order.order_type = 'D'
+                money_order.num = 0 - deposit_order.num
+                money_order.librarian = librarian
+                money_order.save()
+
+                user.is_deleted = True
                 response = JsonResponse({'result': True})
                 return response
             except Exception as e:
+                print(e)
                 return JsonResponse({'result': False})
     else:
         return HttpResponseRedirect(reverse("index"))
@@ -505,7 +525,10 @@ def edit_type_location_page(request):
     username = request.session.get('username', "None")
     if username == 'root':
         if request.method == "GET":
-            return render(request, 'edit_info.html')
+            all_book_type = BookType.objects.all()
+            all_book_location = BookLocation.objects.all()
+            return render(request, 'edit_info.html', {'all_book_type': all_book_type,
+                                                      'all_book_location': all_book_location})
     else:
         return HttpResponseRedirect(reverse("index"))
 
@@ -632,34 +655,44 @@ def delete_book_api(request):
         else:
             try:
                 del_book = AllBook.objects.get(book_id=book_id)
-                if del_book.is_available:  # 如果书未借出
-                    book = Book.objects.get(id=del_book.the_book.id)
-                    # 添加删除记录
-                    delhistory = BookDelHistory()
-                    delhistory.book_id = book_id
-                    delhistory.book_name = book.book_name
-                    if not (book.isbn is None):
-                        delhistory.book_isbn = book.isbn
-                    delhistory.book_author = book.author
-                    delhistory.librarian = libraian
-                    delhistory.del_reason = del_reason
+                book = Book.objects.get(id=del_book.the_book.id)
+                if del_book.status == 2:  # 如果书已借出
+                    borrow_order = BorrowOrder.objects.get(book=del_book)
+                    user = User.objects.get(user_id=borrow_order.user.user_id)
+                    MoneyOrder.objects.create(user=user, order_type='F', num=book.price, librarian=libraian)
+                    borrow_order.debt = 0
+                    borrow_order.return_time = timezone.now()
+                    borrow_order.is_return = True
+                    borrow_order.book.is_available = True
+                    borrow_order.user.borrow_num -= 1
 
-                    if book.total_num == 1:  # 如果只剩这一本
-                        book.delete()
-                    else:
-                        book.total_num -= 1  # 此图书总数减1
-                        book.available_num -= 1
-                        book.save()
-                    # 删除这本图书
-                    del_book.status = 3
-                    del_book.is_available = False
-                    del_book.save()
-                    delhistory.save()
-                    return JsonResponse({"result": True})
-                else:
-                    return JsonResponse({"result": False, "msg": "Book is borrowed!"})  # 请输入正确id
+                    borrow_order.book.save()
+                    borrow_order.user.save()
+                    borrow_order.save()
 
-            except:
+                # 添加删除记录
+                delhistory = BookDelHistory()
+                delhistory.book_id = book_id
+                delhistory.book_name = book.book_name
+                if not (book.isbn is None):
+                    delhistory.book_isbn = book.isbn
+                delhistory.book_author = book.author
+                delhistory.librarian = libraian
+                delhistory.del_reason = del_reason
+
+                book.total_num -= 1  # 此图书总数减1
+                book.available_num -= 1
+                book.save()
+
+                # 删除这本图书
+                del_book.status = 3
+                del_book.is_available = False
+                del_book.save()
+                delhistory.save()
+                return JsonResponse({"result": True})
+
+            except Exception as e:
+                print(e)
                 return JsonResponse({"result": False, "msg": "Please input correct ID!"})  # 请输入正确id
     else:
         return HttpResponseRedirect(reverse("index"))
@@ -711,6 +744,10 @@ def income_record(request):
                 all_deposit += order.num
             else:
                 all_fine += order.num
+
+        all_money = '%.2f' % all_money
+        all_deposit = '%.2f' % all_deposit
+        all_fine = '%.2f' % all_fine
         return render(request, 'income_record.html',
                       {'all_money_orders': all_money_orders, 'all_money': all_money,
                        'all_fine': all_fine, 'all_deposit': all_deposit})
@@ -1002,12 +1039,12 @@ def manage_user_api(request):
         user_id = 0
         username = request.POST["user_name"]
         try:
-            user = User.objects.get(user_name=username)
+            user = User.objects.get(user_name=username, is_deleted=False)
             if user:
                 user_id = user.user_id
         except:
             try:
-                user = User.objects.get(user_id=username)
+                user = User.objects.get(user_id=username, is_deleted=False)
                 if user:
                     user_id = user.user_id
             except:
@@ -1092,7 +1129,8 @@ def manage_user_api(request):
                              'money_orders': money_orders
                              }
                             )
-    except Exception:
+    except Exception as e:
+        print(e)
         return JsonResponse({"result": False, "msg": "Error!"})
 
 

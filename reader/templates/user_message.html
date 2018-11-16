@@ -313,7 +313,7 @@ $(document).ready(function(){
                 {% trans '否' %}
                 {% endif %}
             </td>
-            <td><label class="btn btn-success btn-sm" onclick="">{% trans '取消预约' %}</label></td>
+            <td><label class="btn btn-success btn-sm" onclick="cancel_reserve({{ reserve_order.order_id }})">{% trans '取消预约' %}</label></td>
 		</tr>
     {% endfor %}
 	</tbody>
@@ -395,6 +395,19 @@ Copyright &copy;2018 Library
                 }
             }
         })
+    }
+    function cancel_reserve(reserve_id) {
+        $.get("{% url 'cancel_reserve_api' %}",{"reserve_id": reserve_id},function (result,statue) {
+            if(statue === 'success') {
+                if (result["result"] === true) {
+                    alert("{% trans '取消成功' %}");
+                    //页面跳转
+                    $(window).attr('location', '{% url 'user_message' %}');
+                    }
+                } else {
+                    alert("{% trans '取消失败!' %}")
+                }
+            })
     }
     function test(str){
         var li=document.getElementById("lang").getElementsByTagName("input");

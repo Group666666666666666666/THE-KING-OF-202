@@ -121,7 +121,8 @@ urlpatterns = [
     url(r'^view_notice_content/(?P<notice_id>\d+)/$', librarian_views.view_notice_content, name="view_notice_content"),
     # 查找指定月、周、日的收入
     url(r'^manager/search_income_record/api/$', librarian_views.search_income_record_api, name="search_income_record_api"),
-
+    # 用户取消预约订单
+    url(r'^user/cancel_reserve/api/$', reader_views.cancel_reserve_api, name="cancel_reserve_api")
 
 
 ]

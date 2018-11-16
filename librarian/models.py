@@ -25,8 +25,9 @@ class AllBook(models.Model):
     book_id = models.IntegerField(auto_created=True, primary_key=True)
     is_available = models.BooleanField(null=False, default=True)
     the_book = models.ForeignKey(Book, related_name="all_book_isbn")
-    #0 可借 1 预约 2 已借 3 删除
+    # 0 可借 1 预约 2 已借 3 删除
     status = models.IntegerField(default=0)
+
     def __str__(self):
         return str(self.book_id)
 
@@ -91,7 +92,7 @@ class MoneyOrder(models.Model):
 
     user = models.ForeignKey(User, null=False, related_name="money_orders")
     order_type = models.CharField(max_length=1, choices=TYPE)
-    num = models.IntegerField(null=False)
+    num = models.FloatField(null=False)
     order_time = models.DateTimeField(null=False, auto_now_add=True)
     librarian = models.ForeignKey(Administrator, related_name='money_orders',
                                   null=True, on_delete=models.SET_NULL)
@@ -104,6 +105,9 @@ class MoneyOrder(models.Model):
 class AutoUpdateDB(models.Model):
     is_updated = models.BooleanField()
     updated_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.id
 
 
 # 图书删除记录
@@ -121,3 +125,20 @@ class BookDelHistory(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class BookType(models.Model):
+    book_type = models.CharField(max_length=50, null=False, unique=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.id
+
+
+class BookLocation(models.Model):
+    book_location = models.CharField(max_length=20, null=False, unique=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.id
+

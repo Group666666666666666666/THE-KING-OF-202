@@ -10,7 +10,7 @@ from reader.models import User
 import time
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from librarian.models import ReserveOrder, BorrowOrder, MoneyOrder, Role
+from librarian.models import ReserveOrder, BorrowOrder, MoneyOrder, Role, AllBook, Book
 from django.utils import timezone
 
 def forget_passwd_page(request):
@@ -171,7 +171,7 @@ def user_message(request):
         user = User.objects.get(user_name=username)
         if user:
             borrow_order_list = BorrowOrder.objects.filter(user_id=user.user_id)
-            reserve_order_list = ReserveOrder.objects.filter(user_id=user.user_id)
+            reserve_order_list = ReserveOrder.objects.filter(user_id=user.user_id, expire=False)
             #  --------------------------------------------------------------------
             '''
             for reserve in reserve_order_list:
@@ -255,6 +255,33 @@ def update_psw(request):
                 response = JsonResponse({'result': False})
             return response
         except Exception as e:
+            return JsonResponse({'result': False})
+
+
+def cancel_reserve_api(request):
+    if request.method == "GET":
+        try:
+            reserve_id = request.GET["reserve_id"]
+
+            reserve = ReserveOrder.objects.get(order_id=reserve_id)
+            book = AllBook.objects.get(book_id=reserve.book.book_id)
+            the_book = Book.objects.get(id=reserve.the_book.id)
+
+            if reserve:
+                reserve.expire = True
+                reserve.successful = False
+                book.status = 0
+                book.is_available = True
+                the_book.available_num += 1
+
+                reserve.save()
+                book.save()
+                the_book.save()
+                return JsonResponse({'result': True})
+            else:
+                return JsonResponse({'result': False})
+        except Exception as e:
+            print(e)
             return JsonResponse({'result': False})
 
 

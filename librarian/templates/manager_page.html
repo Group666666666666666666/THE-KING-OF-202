@@ -414,7 +414,7 @@ Copyright &copy;2018 Library
                 document.getElementById("reserve_table_body").innerText = "";
                 document.getElementById("return_book_tbody").innerText = "";
             }else {
-                alert("Failed!\n message:");
+                alert("Failed!\n message:" + result["msg"]);
             }
         });
     }
