@@ -1566,6 +1566,9 @@ def search_income_record_api(request):
             }
             income_records.append(record)
 
+        income_num = '%.2f' % income_num
+        income_deposit = '%.2f' % income_deposit
+        income_fine = '%.2f' % income_fine
         return JsonResponse({'result': True, 'income_records': income_records, 'income_num': income_num,
                              'income_deposit': income_deposit, 'income_fine': income_fine})
     except Exception:

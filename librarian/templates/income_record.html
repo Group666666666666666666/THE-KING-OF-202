@@ -91,7 +91,30 @@
 	box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
 	color: #222;
 }
-			
+        #income_table tbody::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 4px;
+        }
+        #income_table tbody::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
+        }
+        #income_table tbody::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 0;
+            background: rgba(0,0,0,0.1);
+        }
+    #income_table thead, tbody tr {
+        display:table;
+        width:100%;
+        table-layout:fixed;
+    }
+    #income_table tbody {
+        display: block;
+        height: 360px;
+        overflow-y: auto;
+    }
 </style>
 </head>
 <body data-spy="scroll" data-target="#myScrollspy">
@@ -195,7 +218,7 @@
         </div>
     </div>
 </div>
-<div style="padding-bottom: 45px;"></div>
+<div style="padding-bottom: 40px;"></div>
 <footer style="color: #000000;font-size: .60em;font-style: italic;text-align: center;" id="footer">
 京 ICP备 09067229号   京公网安备 110105000296   版权所有 A14组
 <br>

@@ -10,6 +10,8 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'font/css/font-awesome.min.css' %}" rel="stylesheet">
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Edit Category/Location</title>
     <style type="text/css">
     body{
@@ -101,34 +103,72 @@
         </div>
     </div>
 </nav>
-<div style="margin:auto; width:50%; padding-top: 50px">
-    <table class="table table-hover">
-        <caption>悬停表格布局</caption>
-        <thead>
-            <tr>
-                <th>名称</th>
-                <th>城市</th>
-                <th>邮编</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Tanmay</td>
-                <td>Bangalore</td>
-                <td>560001</td>
-            </tr>
-            <tr>
-                <td>Sachin</td>
-                <td>Mumbai</td>
-                <td>400003</td>
-            </tr>
-            <tr>
-                <td>Uma</td>
-                <td>Pune</td>
-                <td>411027</td>
-            </tr>
-        </tbody>
-    </table>
+<div style="margin:auto; width:50%; padding-top: 100px">
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <label class="btn btn-info">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseOne">
+                        {% trans '编辑图书类别' %}
+                    </a>
+                        </label>
+                    <label class="btn btn-info">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseTwo">
+                        {% trans '编辑图书地点' %}
+                    </a>
+                        </label>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <h3>{% trans '图书类别' %}</h3>
+                        {% for type in all_book_type %}
+                            <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(0,this,'{{ type.book_type }}')">{{ type.book_type }}</label>
+                        {% endfor %}
+                    <label class="btn btn-success" data-toggle="tooltip" title="{% trans '新增类别' %}" onclick="add(this,0)"><i class="fa fa-plus"></i></label>
+                </div>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <h3>{% trans '图书地点' %}</h3>
+                        {% for location in all_book_location %}
+                            <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(1,this,'{{ location.book_location }}')">{{ location.book_location }}</label>
+                        {% endfor %}
+                    <label id="location_add" class="btn btn-success" data-toggle="tooltip" title="{% trans '新增地点' %}" onclick="add(this,1)"><i class="fa fa-plus"></i></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="modal_title">
+{#                        模态框（Modal）标题#}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="searchInput" id="modal_body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="delete_lab()">
+                        {% trans '删除' %}
+                    </button>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="change_lab()">
+                        {% trans '更改' %}
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </div>
 <div style="padding-bottom: 45px;"></div>
 <footer style="color: #000000;font-size: .60em;font-style: italic;text-align: center;" id="footer">
@@ -140,24 +180,42 @@ Copyright &copy;2018 Library
 </footer>
 </body>
 <script>
-$.ajaxSetup({
-    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-});
-$(".reserve").click(function(){
-        var id = $(this).attr("id");
-        $.post('{% url 'reserve_api' %}',{"book_id":id}, function (result, statue) {
-                if(result["result"]===false){
-                    alert("{% trans '图书预约失败!\n错误信息: ' %}"+ result['msg']);
-                }else {
-                    var this_button = document.getElementById(id);
-                    this_button.disabled  = true;
-                    this_button.innerText = "{% trans '预约成功' %}";
-                    if(result["update"] === true){
-                        alert("{% trans '该书已预约, 已更新预约时间!' %}")
-                    }
-                }
-        })
-    });
+    //默认显示
+$(function () { $('#collapseOne').collapse('show')});
+$(function () { $('#collapseTwo').collapse('show')});
+var obj_label;
+    function delete_lab() {
+        //该你写代码了 obj_label.innerText
+        alert(obj_label.innerText);
+        obj_label.parentNode.removeChild(obj_label);
+    }
+    function change_lab() {
+        //var modify = document.getElementById("modify");
+        var modify = $('#modal_body').val();
+        obj_label.innerText = modify;
+    }
+    function edit_info(type,obj,str) {
+        var modal_title = document.getElementById("modal_title");
+        var modal_body = document.getElementById("modal_body");
+        modal_body.placeholder = str;
+        if(type){
+            modal_title.innerText = "{% trans '图书地点' %}";
+        }else{
+            modal_title.innerText = "{% trans '图书类别' %}";
+        }
+        obj_label = obj;
+    }
+    function add(obj,type) {
+        var panel_body = document.getElementsByClassName("panel-body");
+            //var type_add = document.getElementById("type_add");
+        var label = document.createElement("label");
+        label.className = "btn btn-success";
+        label.innerText = "None";
+        label.setAttribute("data-toggle","modal");
+        label.setAttribute("data-target","#myModal");
+        label.setAttribute("onclick","edit_info("+type+",this,'None')");
+        panel_body[type].insertBefore(label,obj);
+    }
     function test(str){
         var li=document.getElementById("lang").getElementsByTagName("input");
         li[1].value=str;
