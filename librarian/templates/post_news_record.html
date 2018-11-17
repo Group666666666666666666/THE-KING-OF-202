@@ -149,7 +149,7 @@ word-break:keep-all;
 			</span>
 
             <span class="input-group-btn">
-				<button style="background-color: #dda203" class="btn btn-info btn-search"  onclick="javascrtpt:window.location.href='{% url 'manager_post_news' %}'" >{% trans '新建公告' %}</button>
+				<button class="btn btn-warning"  onclick="javascrtpt:window.location.href='{% url 'manager_post_news' %}'" >{% trans '新建公告' %}</button>
 			</span>
         </div>
     <br/>
@@ -190,11 +190,11 @@ word-break:keep-all;
                     <td>{{ notice.author.administrator_name }}</td>
                     <td>
                         <a href="{% url 'edit_notice' notice.id %}">
-                            <button type="button" >Edit</button>
+                            <button type="button" class="btn btn-success btn-sm">{% trans '编辑' %}</button>
                         </a>
                     </td>
                     <td>
-                        <button type="button" onclick="delete_notice({{ notice.id }})" >Delete</button>
+                        <button type="button" onclick="delete_notice({{ notice.id }})" class="btn btn-danger btn-sm">{% trans '删除' %}</button>
                     </td>
                 </tr>
             {% endfor %}

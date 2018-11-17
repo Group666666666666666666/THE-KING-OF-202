@@ -154,7 +154,7 @@ $(document).ready(function(){
             <div>
                 <ul class="nav navbar-nav navbar-right" id="menu" style="left:0px; top:0px">
                     <li><a style="cursor: pointer;"><span class="fa fa-user fa-lg"></span>&nbsp;&nbsp;admin{{ admin_name }} </a></li>
-                    <li><a href="{% url 'admin_login' %}"><span class="glyphicon glyphicon-home"></span> {% trans '返回登录页面' %}</a></li>
+                    <li><a href="{% url 'admin_login' %}"><span class="glyphicon glyphicon-home"></span> {% trans '注销' %}</a></li>
                 </ul>
             </div>
             <div class="btn-group navbar-btn" data-toggle="buttons">
@@ -226,13 +226,13 @@ $(document).ready(function(){
                             <td>{{ librarian.administrator_name }}</td>
                             <td id= "{{ librarian.administrator_name }}_pwd" >********</td>
                             <td>
-                                <a href="{% url 'edit_librarian' librarian.administrator_name %}"><button type="button">{% trans '编辑' %}</button> </a>
+                                <a href="{% url 'edit_librarian' librarian.administrator_name %}"><button class="btn btn-success btn-sm">{% trans '编辑' %}</button> </a>
                             </td>
                             <td>
-                                <button type="button" onclick="delete_librarian('{{ librarian.administrator_name }}')" >{% trans '删除' %}</button>
+                                <button class="btn btn-danger btn-sm" onclick="delete_librarian('{{ librarian.administrator_name }}')" >{% trans '删除' %}</button>
                             </td>
                             <td>
-                                <button type="button" onmousedown="see_passwd('{{ librarian.administrator_name }}', '{{ librarian.password }}')" onmouseup="hide_passwd('{{ librarian.administrator_name }}', '{{ librarian.password }}')">{% trans '查看密码' %}</button>
+                                <button class="btn btn-success btn-sm" onmousedown="see_passwd('{{ librarian.administrator_name }}', '{{ librarian.password }}')" onmouseup="hide_passwd('{{ librarian.administrator_name }}', '{{ librarian.password }}')">{% trans '查看密码' %}</button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -417,6 +417,7 @@ Copyright &copy;2018 Library
         var button_3 = document.createElement("button");
         button_3.setAttribute("width", "100px");
         button_3.innerText = "{% trans '编辑' %}";
+        button_3.className = "btn btn-success btn-sm";
         edit_href.setAttribute("href", "/manager/edit_librarian/"+result["account"]+"/");
         edit_href.appendChild(button_3);
         edit_librarian.appendChild(edit_href);
@@ -424,12 +425,14 @@ Copyright &copy;2018 Library
         var button_1 = document.createElement("button");
         button_1.setAttribute("width", "100px");
         button_1.innerText = "{% trans '删除' %}";
+        button_1.className = "btn btn-danger btn-sm";
         button_1.setAttribute("onclick", "delete_librarian(" +"\""+result["account"]+"\""+")");
         delete_librarian.appendChild(button_1);
         var see_passwd_button = document.createElement("td");
         var button_2 = document.createElement("button");
         button_2.setAttribute("width", "100px");
         button_2.innerText = "{% trans '查看密码' %}";
+        button_2.className = "btn btn-success btn-sm";
         button_2.setAttribute("onmousedown", "see_passwd(" + "\""+result["account"]+"\"" + ", " +
             "\""+result["psw"]+"\""+ ")" );
          button_2.setAttribute("onmouseup", "hide_passwd(" + "\""+result["account"]+"\"" + ", " +

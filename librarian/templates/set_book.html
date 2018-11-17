@@ -194,6 +194,10 @@ bookid_fouces()
         $('#isbn').bind('keypress',function(event){
             if (event.keyCode == "13") {
                 var isbn = document.getElementById("isbn").value;
+                if (isbn == ''){
+                    alert("{% trans '输入为空！' %}");
+                    return;
+                }
                 $.get("{% url 'get_book_api' %}", {"isbn": isbn},function (result, statue) {
                     if (result['result']=== true){
                         document.getElementById("book_name").value = result["book_name"];
@@ -224,6 +228,10 @@ bookid_fouces()
         $('#bookid').bind('keypress',function(event){
             if (event.keyCode == "13") {
                 var bookid = document.getElementById("bookid").value;
+                if (bookid == ''){
+                    alert("{% trans '输入为空！' %}");
+                    return;
+                }
                 $.get("{% url 'get_bookbyid_api' %}", {"bookid": bookid},function (result, statue) {
                     if (result['result']=== true){
                         document.getElementById("book_name").value = result["book_name"];

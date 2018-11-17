@@ -172,6 +172,7 @@ def user_message(request):
         if user:
             borrow_order_list = BorrowOrder.objects.filter(user_id=user.user_id)
             reserve_order_list = ReserveOrder.objects.filter(user_id=user.user_id, expire=False)
+            # reserve_order_list = ReserveOrder.objects.filter(user_id=user.user_id)
             #  --------------------------------------------------------------------
             '''
             for reserve in reserve_order_list:

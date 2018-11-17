@@ -54,26 +54,6 @@
         box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
         color: #222;
     }
-    .tab1 > tbody > tr:nth-child(2n-1) > td,
-    .tab1 > tbody > tr:nth-child(2n-1) > th {
-        {#background-color: #afd9ee;#}
-         background-color: rgba(100,50,180,0.1);
-     }
-
-    .tab1 > tbody > tr:nth-child(2n) > td,
-    .tab1 > tbody > tr:nth-child(2n) > th {
-        {#background-color: #8EB2D2;#}
-        background-color: rgba(120,200,30,0.1);
-     }
-     th {
-        text-align: center;
-    }
-    tbody {
-        text-align: center;
-    }
-    .table tbody tr td{
-            vertical-align: middle;
-    }
 </style>
 </head>
 <body>
@@ -142,8 +122,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">×
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times"></i>
                     </button>
                     <h4 class="modal-title" id="modal_title">
 {#                        模态框（Modal）标题#}
@@ -153,12 +133,12 @@
                     <input type="text" class="searchInput" id="modal_body">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="delete_lab()">
-                        {% trans '删除' %}
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="delete_lab()">
+                        <i class="fa fa-trash-o"></i>&nbsp;{% trans '删除' %}
                     </button>
                     </button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="change_lab()">
-                        {% trans '更改' %}
+                        <i class="fa fa-pencil"></i>&nbsp;{% trans '更改' %}
                     </button>
                 </div>
             </div><!-- /.modal-content -->
@@ -207,6 +187,10 @@ var old_name;
     function change_lab() {
         //var modify = document.getElementById("modify");
         var edit_type_or_loc = $('#modal_body').val();
+        if (edit_type_or_loc == ''){
+            alert("{% trans '输入为空！' %}");
+            return;
+        }
         $.get("{% url 'edit_type_and_location_api' %}", {'old_name': old_name, 'edit_type_or_loc': edit_type_or_loc, 'type': type2}, function(result){
             if(result["result"] === true){
                 obj_label.innerText = edit_type_or_loc;
@@ -234,7 +218,10 @@ var old_name;
         var add = document.getElementsByClassName("btn btn-warning");
             //var type_add = document.getElementById("type_add");
         var add_type_or_loc = add[type].value;
-
+        if (add_type_or_loc == ''){
+            alert("{% trans '输入为空！' %}");
+            return;
+        }
         $.get("{% url 'add_type_and_location_api' %}", {'add_type_or_loc': add_type_or_loc, 'type': type}, function(result){
             if(result["result"] === true){
                 var label = document.createElement("label");

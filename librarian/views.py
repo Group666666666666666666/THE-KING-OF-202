@@ -581,7 +581,6 @@ def search_book_api(request):
 
 
 def search_book(request):
-
     '''
     查询书籍
     :param request:
@@ -1526,8 +1525,11 @@ def search_notices_api(request):
 def view_notice_content(request, notice_id):
     notice = Notice.objects.get(id=notice_id)
     username = request.session.get('username', "None")
+    '''
+    游客也可以看公告
     if username == "None":
         return HttpResponseRedirect(reverse("login"))
+    '''
     return render(request, 'view_news.html', {"notice": notice, "username": username})
 
 

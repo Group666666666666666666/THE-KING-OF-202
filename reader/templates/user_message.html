@@ -233,15 +233,15 @@ $(document).ready(function(){
 			<th style="text-align: center;">{% trans '归还期限' %}</th>
 			<th style="text-align: center;">{% trans '欠费金额' %}</th>
 			<th style="text-align: center;">{%  trans '是否归还' %}</th>
-            <th style="text-align: center;">{%  trans '是否过期' %}</th>
+            <!--<th style="text-align: center;">{%  trans '是否过期' %}</th>-->
 		</tr>
 	</thead>
 	<tbody style="text-align: center;">
     {% for borrow_order in borrow_order_list %}
-        {% if borrow_order.expire %}
+        {% if borrow_order.is_return %}
         <tr class="success">
         {% else %}
-        <tr class="active">
+        <tr class="warning">
         {% endif %}
         <td >{{ borrow_order.order_id }}</td>
         <td >{{ borrow_order.book.book_id }}</td>
@@ -260,6 +260,7 @@ $(document).ready(function(){
             {% trans '否' %}
             {% endif %}
         </td>
+        <!--
         <td>
             {% if borrow_order.expire %}
             {% trans '是' %}
@@ -267,6 +268,7 @@ $(document).ready(function(){
             {% trans '否' %}
             {% endif %}
         </td>
+        -->
     {% endfor %}
 	</tbody>
 </table>
@@ -284,8 +286,11 @@ $(document).ready(function(){
             <th style="text-align: center;">{% trans '书籍id' %}</th>
             <th style="text-align: center;">{% trans '书名' %}</th>
 			<th style="text-align: center;">{% trans '预约时间' %}</th>
+            <th style="text-align: center;">{% trans '取消预约' %}</th>
+            <!--
 			<th style="text-align: center;">{% trans '是否有效' %}</th>
 			<th style="text-align: center;">{% trans '是否过期' %}</th>
+			-->
 		</tr>
 	</thead>
 	<tbody style="text-align: center;">
@@ -299,6 +304,7 @@ $(document).ready(function(){
             <td>{{ reserve_order.book.book_id }}</td>
 			<td >{{ reserve_order.the_book.book_name}}</td>
 			<td>{{ reserve_order.borrow_time }}</td>
+            <!--
             <td>
                 {% if borrow_order.successful %}
                 {% trans '是' %}
@@ -313,6 +319,7 @@ $(document).ready(function(){
                 {% trans '否' %}
                 {% endif %}
             </td>
+            -->
             <td><label class="btn btn-success btn-sm" onclick="cancel_reserve({{ reserve_order.order_id }})">{% trans '取消预约' %}</label></td>
 		</tr>
     {% endfor %}

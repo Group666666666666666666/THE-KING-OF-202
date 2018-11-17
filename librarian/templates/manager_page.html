@@ -479,7 +479,7 @@ Copyright &copy;2018 Library
         var td_4 = document.createElement("td");
         var delete_user_button = document.createElement("button");
         delete_user_button.innerText = "{% trans '删除' %}";
-        delete_user_button.className = "btn btn-success btn-sm";
+        delete_user_button.className = "btn btn-danger btn-sm";
         delete_user_button.setAttribute("onclick", "delete_reader("+"\""+user["user_name"]+"\""+")");
         td_4.appendChild(delete_user_button);
 
@@ -633,6 +633,10 @@ Copyright &copy;2018 Library
     function search_user_message() {
         // 搜索用户信息
         var user_name = $("#search_input").val();
+        if (user_name == ''){
+            alert("{% trans '输入为空！' %}");
+            return;
+        }
         $.post('{% url 'manage_user_message_api' %}',{"user_name":user_name},function(result, statue){
                 if(result["result"] === true){
                         var user = result["user_message"];
@@ -657,6 +661,10 @@ Copyright &copy;2018 Library
         var parent = document.getElementById("book_borrow_directly_body");
         parent.innerText ="";
         var book_id = $("#book_input").val();
+        if (book_id == ''){
+            alert("{% trans '输入为空！' %}");
+            return;
+        }
         $.post('{% url 'book_detail_api' %}',{"book_id":book_id},function(result, statue){
             if(result["result"] === true){
                 var book_name = result["book_name"];
