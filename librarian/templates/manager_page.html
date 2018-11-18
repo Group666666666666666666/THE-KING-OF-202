@@ -37,6 +37,17 @@ tbody {
         {#background-color: #8EB2D2;#}
         background-color: rgba(120,100,130,0.2);
      }
+    .unreturn > tbody > tr:nth-child(2n-1) > td,
+    .unreturn > tbody > tr:nth-child(2n-1) > th {
+        {#background-color: #afd9ee;#}
+         background-color: rgba(180,233,80,0.2);
+     }
+
+    .unreturn > tbody > tr:nth-child(2n) > td,
+    .unreturn > tbody > tr:nth-child(2n) > th {
+        {#background-color: #8EB2D2;#}
+        background-color: rgba(180,233,80,0.2);
+     }
 /* Custom Styles */
     ul.nav-tabs{
         width: 140px;
@@ -305,7 +316,7 @@ position: relative;
             <h2 style="display:block; height:50px; width:400px">{% trans '未还图书' %}</h2>
 
 
-    <table align="center" id="tab" width="300px"  class="table tab1">
+    <table align="center" id="tab" width="300px"  class="table unreturn">
 
         <thead>
         <tr >
@@ -407,6 +418,12 @@ Copyright &copy;2018 Library
     }
 
     function delete_reader(name) {
+        var fine = document.getElementById("all_fine").innerText;
+        fine = parseFloat(fine);
+        if(fine > 0){
+            alert("{% trans '请先缴纳罚金：' %}"+fine+" ￥");
+            return;
+        }
         $.get("{% url 'manager_delete_reader' %}", {'username':name}, function(result){
             if(result["result"] === true){
                 alert("{% trans "删除成功" %}");

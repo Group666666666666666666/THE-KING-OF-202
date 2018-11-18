@@ -39,18 +39,14 @@
     bottom: 0;
     text-align: center;
     }
-    .tab1 > tbody > tr:nth-child(2n-1) > td,
-    .tab1 > tbody > tr:nth-child(2n-1) > th {
-        {#background-color: #afd9ee;#}
-         background-color: rgba(180,233,80,0.2);
-     }
-
-    .tab1 > tbody > tr:nth-child(2n) > td,
-    .tab1 > tbody > tr:nth-child(2n) > th {
+    .deposit td {
         {#background-color: #8EB2D2;#}
         background-color: rgba(120,100,130,0.2);
      }
-
+     .fine td{
+        {#background-color: #afd9ee;#}
+         background-color: rgba(180,233,80,0.2);
+     }
     div {
      display: block;
    }
@@ -148,12 +144,7 @@
         <img src="/static/images/book_logo.png" style="vertical-align:middle;" width="150"  />&nbsp;&nbsp;&nbsp;
         <span style="font-family: 'Adobe 宋体 Std L'; font-size: 36px;">{% trans '收入记录' %}</span>
     </div>
-<div class="container" style="position: relative; top:-30px;">
-    <div style="text-align: right">
-        <label class="btn btn-primary" onclick="changeView()">
-            {% trans '改变视图' %}
-        </label>
-    </div>
+<div class="container">
         <div>
             <div align="center">
             <form action="#" method="post" id="income">
@@ -176,12 +167,12 @@
                     <span id="find_way"></span>
                     {% trans '总收入:' %}&nbsp;
                     <span id="all_fine" style="text-align: right">{{ all_money }}</span>￥&nbsp;&nbsp;&nbsp;
-                    {% trans '罚金收入:' %}&nbsp;
+                    {% trans '罚金' %}:&nbsp;
                     <span id="fine" style="text-align: right">{{ all_fine }}</span>￥&nbsp;&nbsp;&nbsp;
-                    {% trans '保证金收入:' %}&nbsp;
+                    {% trans '保证金' %}:&nbsp;
                     <span id="deposit" style="text-align: right">{{ all_deposit }}</span>￥
                 </h4>
-
+                <label class="btn btn-success" onclick="changeView(this)" data-toggle="tooltip" title="{% trans '改变视图' %}"><i class="fa fa-bar-chart" aria-hidden="true"></i></label>
             </form>
             </div>
         <div id="income_table" style="display: block;">
@@ -201,7 +192,11 @@
 
             <tbody id="money_orders">
             {% for money_order in all_money_orders %}
-                <tr class="active">
+                {% if money_order.get_order_type_display == 'FINE' %}
+                <tr class="fine">
+                {% else %}
+                <tr class="deposit">
+                {% endif %}
                     <td>{{ money_order.id }}</td>
                     <td>{{ money_order.user.user_name }}</td>
                     <td>{{ money_order.order_time | date:"Y-m-d H:i:s" }}</td>
@@ -555,7 +550,7 @@ Copyright &copy;2018 Library
         myChart.setOption(option);
     }
     var flag = 0;
-    function changeView(){
+    function changeView(obj){
         //alert(date);
         var chart = document.getElementById("income_chart");
         var table = document.getElementById("income_table");
@@ -563,10 +558,12 @@ Copyright &copy;2018 Library
             flag = 0;
             chart.style.display = "none";
             table.style.display = "block";
+            obj.childNodes[0].className = "fa fa-bar-chart";
         }else{
             flag = 1;
             chart.style.display = "block";
             table.style.display = "none";
+            obj.childNodes[0].className = "fa fa-table";
         }
     }
     $.ajaxSetup({
@@ -595,7 +592,11 @@ Copyright &copy;2018 Library
         parent.innerText = "";
         for( var i=0;i<income_records.length;i++){
             var tr = document.createElement("tr");
-            tr.setAttribute("class", "active");
+            if(income_records[i]["order_type"] == 'FINE'){
+                tr.setAttribute("class", "fine");
+            }else{
+                tr.setAttribute("class", "deposit");
+            }
             var td = document.createElement("td");
             var td_1 = document.createElement("td");
             var td_2 = document.createElement("td");

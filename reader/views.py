@@ -222,7 +222,7 @@ def sendEmailToChangePsw(request):
                 salt = ''.join(sa)
                 code = salt
                 s = SendEmail()
-                s.send("图书管理系统密码修改", temp.password, temp.email)
+                s.send("Reader Recovery Password","Password: "+temp.password, temp.email)
                 s.close_smtp()
                 response = JsonResponse({'result': True, "code": code})
             else:

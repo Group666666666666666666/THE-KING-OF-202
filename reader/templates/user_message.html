@@ -238,37 +238,30 @@ $(document).ready(function(){
 	</thead>
 	<tbody style="text-align: center;">
     {% for borrow_order in borrow_order_list %}
+        {% if not borrow_order.is_return %}
+        <tr class="danger">
+            <td >{{ borrow_order.order_id }}</td>
+            <td >{{ borrow_order.book.book_id }}</td>
+            <td >{{ borrow_order.book.the_book.book_name }}</td>
+            <td >{{ borrow_order.borrow_time }}</td>
+            <td>{% trans '尚未归还' %}</td>
+            <td>{{ borrow_order.debt }}</td>
+            <td>{% trans '否' %}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    {% for borrow_order in borrow_order_list %}
         {% if borrow_order.is_return %}
         <tr class="success">
-        {% else %}
-        <tr class="warning">
-        {% endif %}
-        <td >{{ borrow_order.order_id }}</td>
-        <td >{{ borrow_order.book.book_id }}</td>
-        <td >{{ borrow_order.book.the_book.book_name }}</td>
-        <td >{{ borrow_order.borrow_time }}</td>
-        {% if borrow_order.return_time == None %}
-            <td>{% trans '尚未归还' %}</td>
-        {% else %}
+            <td >{{ borrow_order.order_id }}</td>
+            <td >{{ borrow_order.book.book_id }}</td>
+            <td >{{ borrow_order.book.the_book.book_name }}</td>
+            <td >{{ borrow_order.borrow_time }}</td>
             <td>{{ borrow_order.return_time }}</td>
+            <td>{{ borrow_order.debt }}</td>
+            <td>{% trans '是' %}</td>
+        </tr>
         {% endif %}
-        <td>{{ borrow_order.debt }}</td>
-        <td>
-            {% if borrow_order.is_return %}
-            {% trans '是' %}
-            {% else %}
-            {% trans '否' %}
-            {% endif %}
-        </td>
-        <!--
-        <td>
-            {% if borrow_order.expire %}
-            {% trans '是' %}
-            {% else %}
-            {% trans '否' %}
-            {% endif %}
-        </td>
-        -->
     {% endfor %}
 	</tbody>
 </table>
