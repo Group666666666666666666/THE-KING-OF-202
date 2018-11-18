@@ -41,10 +41,11 @@ def index(request):
                     if not each.expire:  # 如果没设置到期
                         each.expire = True
 
+                if timezone.now() - each.borrow_time > timezone.timedelta(days=int(role.days_limit)-1):
                     # 向没有发过提醒邮件的用户发送邮件
                     if not each.is_alert:  # 如果没有发过提醒邮件
                         expire_date = time_stamp_to_str((each.borrow_time + timezone.timedelta(days=role.days_limit)).timetuple())
-                        content = '您所借图书《' + each.book.the_book.book_name + '》已于 ' + str(expire_date) +\
+                        content = '您所借图书《' + each.book.the_book.book_name + '》将于 ' + str(expire_date) +\
                                   ' 到期，现罚金为 ' + str(each.debt) + ' 元，请及时归还图书并缴纳罚金，谢谢！'
                         s = SendEmail()
                         if s:  # 如果登录成功
@@ -59,7 +60,7 @@ def index(request):
                                       each.book.the_book.book_name + '》: Success!')
                                 each.is_alert = True
 
-                    each.save()  # 数据库保存
+                each.save()  # 数据库保存
 
         if flag:
             AutoUpdateDB.objects.create(is_updated=True)
