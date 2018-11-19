@@ -100,6 +100,7 @@ def register_post(request):
                 pass
             if flag:
                 return JsonResponse({'result': False})
+
             email = request.POST["email"]
             libraian_name = request.session["admin_name"]
             libraian = Administrator.objects.get(administrator_name=libraian_name)
