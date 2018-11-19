@@ -51,7 +51,7 @@ def index(request):
                                   ' . Please return the book in time. Thank you!'
                         s = SendEmail()
                         if s:  # 如果登录成功
-                            is_successful = s.send("Bibliosoft: Book Expiration Reminder", content, each.user.email)
+                            is_successful = s.send("Bibliosoft: Book Expiration Reminder 图书到期提醒", content, each.user.email)
                             s.close_smtp()
                             if not is_successful:
                                 flag = False
@@ -887,25 +887,20 @@ def send_mail_api(request):
         return JsonResponse({"result": False, "msg": "Borrow_order_id is invalid"})
 
     try:
-        if borrow_order.debt <= 0:  # 图书未到期
-            return JsonResponse({"result": False, "msg": "This borrower_order is't expire"})
-        else:
-            expire_date = time_stamp_to_str((borrow_order.borrow_time + timezone.timedelta(days=role.days_limit)).timetuple())
-            content = '您所借图书《' + borrow_order.book.the_book.book_name + '》已于 ' + expire_date + \
-                      ' 到期，现罚金为 ' + str(borrow_order.debt) + ' 元，请及时归还图书并缴纳罚金，谢谢！\n\n' +\
-                      'The book you borrowed,《' + borrow_order.book.the_book.book_name + '》, was due at ' + expire_date\
-                      + ' , the fine is ' + str(borrow_order.debt) +\
-                      ' ￥. Please return the book in time and pay the fine. Thank you!'
-            s = SendEmail()
-            if s:  # 如果登录成功
-                is_successful = s.send("Bibliosoft: Book Expiration Reminder", content, borrow_order.user.email)
-                s.close_smtp()
-                if is_successful:
-                    return JsonResponse({"result": True, "msg": "Send email successful!"})
-                else:
-                    return JsonResponse({"result": False, "msg": "Send email failure!"})
+        expire_date = time_stamp_to_str((borrow_order.borrow_time + timezone.timedelta(days=role.days_limit)).timetuple())
+        content = 'The book you borrowed,《' + borrow_order.book.the_book.book_name + '》, was due at ' + expire_date\
+                  + ' , the fine is ' + str(borrow_order.debt) +\
+                  ' ￥. Please return the book in time and pay the fine. Thank you!'
+        s = SendEmail()
+        if s:  # 如果登录成功
+            is_successful = s.send("Bibliosoft: Book Expiration Reminder 图书到期提醒 ", content, borrow_order.user.email)
+            s.close_smtp()
+            if is_successful:
+                return JsonResponse({"result": True, "msg": "Send email successful!"})
             else:
-                return JsonResponse({"result": False, "msg": "Sign in the email failure!"})
+                return JsonResponse({"result": False, "msg": "Send email failure!"})
+        else:
+            return JsonResponse({"result": False, "msg": "Sign in the email failure!"})
     except Exception as e:
         print(e)
         return JsonResponse({"result": False, "msg": "Send email failure!"})
