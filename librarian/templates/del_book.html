@@ -144,6 +144,7 @@ book_id_fouces();
     $(document).ready(function () {
         $('#book_id').bind('keypress',function(event){
             if (event.keyCode == "13") {
+                this.value = parseInt(this.value);
                 url = '/get_book_info_by_id/api/?book_id='+$(this).val();
                 $.get(url, function (result, statue) {
                     if(statue === "success") {

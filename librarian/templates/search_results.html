@@ -67,10 +67,10 @@
             <a class="navbar-brand">Bibliosoft</a>
         </div>
         <div>
-            <ul class="nav navbar-nav navbar-right" id="menu" style="position:absolut; left:0px; top:0px">
+            <ul class="nav navbar-nav navbar-right" id="menu" style="left:0px; top:0px">
                 {% if username == 'root' %}
                 <li><a href="{% url 'manage_page' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;{% trans '进入管理中心' %}</a></li>
-                {% else %}
+                {% elif username != 'None' and username != 'anti_man' %}
                 <li><a href="/user_message/"><span class="fa fa-user-circle-o"></span>&nbsp;{% trans '返回个人中心' %}</a></li>
                 {% endif %}
                 <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;{% trans '返回首页' %}</a></li>

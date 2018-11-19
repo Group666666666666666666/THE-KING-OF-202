@@ -396,11 +396,13 @@ Copyright &copy;2018 Library
     $(document).ready(function () {
         $('#search_input').bind('keypress',function(event){
             if (event.keyCode == "13") {
+               this.value = parseInt(this.value)
                search_user_message();
             }
         });
         $('#book_input').bind('keypress',function(event){
             if (event.keyCode == "13") {
+                this.value = parseInt(this.value)
                search_book();
             }
         });
@@ -654,6 +656,7 @@ Copyright &copy;2018 Library
             alert("{% trans '输入为空！' %}");
             return;
         }
+        //user_name = parseInt(user_name);
         $.post('{% url 'manage_user_message_api' %}',{"user_name":user_name},function(result, statue){
                 if(result["result"] === true){
                         var user = result["user_message"];
@@ -725,6 +728,7 @@ Copyright &copy;2018 Library
     }
     function  directly_borrow_book(book_id) {
         var user_name = $("#search_input").val();
+        //user_name = parseInt(user_name);
         $.post('{% url 'borrow_book_directly_api' %}',{"book_id":book_id,"user_name":user_name},function(result, statue) {
             if(result["result"]===true){
                 alert("{% trans '借阅成功' %}");

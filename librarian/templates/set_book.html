@@ -193,6 +193,7 @@ bookid_fouces()
     $(document).ready(function () {
         $('#isbn').bind('keypress',function(event){
             if (event.keyCode == "13") {
+                this.value = parseInt(this.value);
                 var isbn = document.getElementById("isbn").value;
                 if (isbn == ''){
                     alert("{% trans '输入为空！' %}");
@@ -227,7 +228,8 @@ bookid_fouces()
 
         $('#bookid').bind('keypress',function(event){
             if (event.keyCode == "13") {
-                var bookid = document.getElementById("bookid").value;
+                this.value = parseInt(this.value);
+                var bookid = this.value;
                 if (bookid == ''){
                     alert("{% trans '输入为空！' %}");
                     return;

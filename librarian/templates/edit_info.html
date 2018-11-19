@@ -54,6 +54,9 @@
         box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
         color: #222;
     }
+    label {
+        margin-top: 5px;
+    }
 </style>
 </head>
 <body>
@@ -96,7 +99,7 @@
                     <h3>
                         <span style="display: inline-block; width: 60%;">{% trans '图书类别' %}</span>
                         <input type="text" style="display: inline-block; width: 20%; height: 26px;    cursor: inherit" class="btn btn-warning" id="input0">
-                        <label class="btn btn-success" data-toggle="tooltip" title="{% trans '新增类别' %}" onclick="add(0)"><i class="fa fa-plus"></i></label>
+                        <span class="btn btn-success" data-toggle="tooltip" title="{% trans '新增类别' %}" onclick="add(0)"><i class="fa fa-plus"></i></span>
                     </h3>
                         {% for type in all_book_type %}
                             <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(0,this)">{{ type.book_type }}</label>
@@ -108,7 +111,7 @@
                     <h3>
                         <span style="display: inline-block; width: 60%;">{% trans '图书地点' %}</span>
                         <input type="text" style="display: inline-block; width: 20%; height: 26px; cursor: inherit" class="btn btn-warning" id="input1">
-                        <label class="btn btn-success" data-toggle="tooltip" title="{% trans '新增地点' %}" onclick="add(1)"><i class="fa fa-plus"></i></label>
+                        <span class="btn btn-success" data-toggle="tooltip" title="{% trans '新增地点' %}" onclick="add(1)"><i class="fa fa-plus"></i></span>
                     </h3>
                         {% for location in all_book_location %}
                             <label class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="edit_info(1,this)">{{ location.book_location }}</label>

@@ -165,6 +165,7 @@ isbn_fouces();
     $(document).ready(function () {
         $('#isbn').bind('keypress',function(event){
             if (event.keyCode == "13") {
+                this.value = parseInt(this.value);
                 url = '/isbn/api/?isbn='+$(this).val();
                 $.get(url, function (result, statue) {
                     if (result['result']=== true){

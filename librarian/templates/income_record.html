@@ -202,7 +202,7 @@
                     <td>{{ money_order.order_time | date:"Y-m-d H:i:s" }}</td>
                     <td>{{ money_order.get_order_type_display }}</td>
                     <td>{{ money_order.librarian.administrator_name }}</td>
-                    <td>{{ money_order.num }}</td>
+                    <td>{{ money_order.num | floatformat:2}}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -609,7 +609,7 @@ Copyright &copy;2018 Library
             td_2.innerText = income_records[i]["order_time"];
             td_3.innerText = income_records[i]["order_type"];
             td_4.innerText = income_records[i]["librarian_name"];
-            td_5.innerText = income_records[i]["num"];
+            td_5.innerText = income_records[i]["num"].toFixed(2);
 
             tr.appendChild(td);
             tr.appendChild(td_1);
