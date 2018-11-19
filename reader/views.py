@@ -143,7 +143,7 @@ def login_post(request):
             password = request.POST["password"]
             username = request.POST["username"]
             remember = request.POST['remember']
-            temp = User.objects.get(user_name=username, password=password)
+            temp = User.objects.get(user_name=username, password=password, is_deleted=False)
             if temp:
                 user_id = temp.user_id
                 response = JsonResponse({'result': True})

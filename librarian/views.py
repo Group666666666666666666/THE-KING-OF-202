@@ -97,7 +97,7 @@ def book_detail(request):
     username = request.session.get('username', "None")
     if username == "root":
         is_administrator = True
-    else:   # 系统管理员和读者都得重新登陆
+    elif username == 'anti_man' or username == 'None':   # 系统管理员和读者都得重新登陆
         return HttpResponseRedirect(reverse("login"))
     try:
         book_id = request.GET['book_id']
