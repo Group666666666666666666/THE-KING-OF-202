@@ -45,9 +45,7 @@ def index(request):
                     # 向没有发过提醒邮件的用户发送邮件
                     if not each.is_alert:  # 如果没有发过提醒邮件
                         expire_date = time_stamp_to_str((each.borrow_time + timezone.timedelta(days=role.days_limit)).timetuple())
-                        content = '您所借图书《' + each.book.the_book.book_name + '》将于 ' + str(expire_date) +\
-                                  ' 到期。请及时归还图书，谢谢！\n\n' +\
-                                  'The book you borrowed,《' + each.book.the_book.book_name + '》, will be due at ' + str(expire_date) +\
+                        content = 'The book you borrowed,《' + each.book.the_book.book_name + '》, will be due at ' + str(expire_date) +\
                                   ' . Please return the book in time. Thank you!'
                         s = SendEmail()
                         if s:  # 如果登录成功
@@ -266,7 +264,7 @@ def delete_reader(request):
                     if borrow_order.debt != 0:
                         return JsonResponse({'result': False, 'msg': 'Please pay the debt!'})
 
-                deposit_order = MoneyOrder.objects.get(order_type='D', user=user)
+                deposit_order = MoneyOrder.objects.filter(order_type='D', user=user).order_by('-order_time').first()
 
                 money_order = MoneyOrder()
                 money_order.user = user
@@ -674,8 +672,10 @@ def delete_book_api(request):
             try:
                 del_book = AllBook.objects.get(book_id=book_id)
                 book = Book.objects.get(id=del_book.the_book.id)
+                if del_book.status == 3:  # 如果书已被删除
+                    return JsonResponse({"result": False, "msg": "This book has been deleted!"})
                 if del_book.status == 2:  # 如果书已借出
-                    borrow_order = BorrowOrder.objects.get(book=del_book)
+                    borrow_order = BorrowOrder.objects.get(book=del_book, is_return=False)
                     user = User.objects.get(user_id=borrow_order.user.user_id)
                     MoneyOrder.objects.create(user=user, order_type='F', num=book.price, librarian=libraian)
                     borrow_order.debt = 0
@@ -1369,6 +1369,8 @@ def get_book_info_by_id_api(request):
     if book_id:
         try:
             the_book = AllBook.objects.get(book_id=book_id)
+            if the_book.status == 3:
+                return JsonResponse({"result": False})
             book = Book.objects.get(id=the_book.the_book.id)
             result_json['isbn'] = book.isbn
             result_json['author'] = book.author

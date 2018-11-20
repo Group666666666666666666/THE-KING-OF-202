@@ -431,7 +431,9 @@ Copyright &copy;2018 Library
                 alert("{% trans "删除成功" %}");
                 document.getElementById("user_message_tr").innerText = "";
                 document.getElementById("reserve_table_body").innerText = "";
-                document.getElementById("return_book_tbody").innerText = "";
+                document.getElementById("unreturned_book_tbody").innerText = "";
+                document.getElementById("returned_book_tbody").innerText = "";
+                document.getElementById("money_orders").innerText = "";
             }else {
                 alert("Failed!\n message:" + result["msg"]);
             }

@@ -70,7 +70,7 @@ def user_name_is_available(request):
         flag = False
         try:
             user_name = request.POST["username"]
-            temp = User.objects.get(user_name=user_name)
+            temp = User.objects.get(user_name=user_name, is_deleted=False)
             if temp:
                 flag = True
         except Exception as e:
@@ -91,9 +91,10 @@ def register_post(request):
         try:
             password = request.POST["password"]
             username = request.POST["username"]
+            email = request.POST["email"]
             flag = False
             try:
-                temp = User.objects.get(user_name=username)
+                temp = User.objects.get(user_name=username, is_deleted=False)
                 if temp:
                     flag = True
             except Exception as e:
@@ -101,11 +102,18 @@ def register_post(request):
             if flag:
                 return JsonResponse({'result': False})
 
-            email = request.POST["email"]
+            try:
+                temp = User.objects.get(user_name=username, is_deleted=True)
+                temp.password = password
+                temp.email = email
+                temp.is_deleted = False
+                temp.save()
+            except Exception as e:
+                user = User(user_name=username, password=password, email=email)
+                user.save()
+
             libraian_name = request.session["admin_name"]
             libraian = Administrator.objects.get(administrator_name=libraian_name)
-            user = User(user_name=username, password=password, email=email)
-            user.save()
 
             if username.isalnum() and username:
                 result = BarCode.create_bar_code(username)
@@ -114,14 +122,14 @@ def register_post(request):
             # 押金数目
             deposit = Role.objects.first().deposit
 
-            temp = User.objects.get(user_name=username)
+            temp = User.objects.get(user_name=username, is_deleted=False)
 
             if temp:
                 # 添加押金记录
 
                 temp1 = MoneyOrder.objects.create(user=temp, order_type='D', num=deposit, librarian=libraian)
                 if temp1:
-                    response = JsonResponse({'result': True,'url':bar_code_url})
+                    response = JsonResponse({'result': True, 'url': bar_code_url})
                 else:
                     response = JsonResponse({'result': False})
             else:
